@@ -272,3 +272,17 @@ section.hero .hero-panel h1{
   background: #0E141C;
 }
 
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+

@@ -6,7 +6,6 @@
   <title>BuildSmart</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -29,9 +28,9 @@
   <section id="home" class="hero">
     <div class="hero-panel">
         <h1 class="hero-title">
-        <span>Entdecken</span>
-        <span>Vorschlagen</span>
-        <span>Verändern</span>
+          <span>Entdecken</span>
+          <span>Vorschlagen</span>
+          <span>Verändern</span>
         </h1>
       <p>Eine klare Plattform für nachhaltige Infrastruktur in deiner Stadt.</p>
       <div class="hero-actions">
@@ -41,48 +40,54 @@
     </div>
   </section>
 
-  <!-- Zwei Bereiche -->
-  <section class="grid two" id="ideen">
+  <!-- Ideen -->
+  <section id="ideen" class="grid two">
     <div class="section-head">
       <h2>Neue Ideen</h2>
       <p>Skizzen, Vorschläge, kleine Projekte. Kurz, klar, nachvollziehbar.</p>
     </div>
 
-    <div class="cards">
-      <!-- Demo cards -->
+    <div class="cards" id="ideen-list">
       <article class="card">
+        <img src="img/allee.jpg" alt="Grüne Allee am Fluss" class="card-thumb">
         <h3>Grüne Allee am Fluss</h3>
         <p>Beschattung, Fuß- und Radweg, Regenwasserrinne.</p>
-        <button class="btn btn-accent" data-modal="ideen">Hochladen</button>
       </article>
 
       <article class="card">
+        <img src="img/solar.jpg" alt="Solar auf Bushaltestellen" class="card-thumb">
         <h3>Solar auf Bushaltestellen</h3>
         <p>Energie für Beleuchtung und Anzeige.</p>
-        <button class="btn btn-accent" data-modal="ideen">Hochladen</button>
       </article>
     </div>
+
+<div class="btn-section">
+  <button class="btn" data-modal="ideen">Idee hinzufügen</button>
+</div>
   </section>
 
-  <section class="grid two" id="reparieren">
+  <!-- Reparieren -->
+  <section id="reparieren" class="grid two">
     <div class="section-head">
       <h2>Reparieren</h2>
       <p>Schäden mit Ort & Datum melden. Kurz beschreiben, Foto optional.</p>
     </div>
 
-    <div class="cards">
+    <div class="cards" id="reparieren-list">
       <article class="card">
+        <img src="img/road.jpg" alt="Schlaglöcher – Hauptstraße" class="card-thumb">
         <h3>Schlaglöcher – Hauptstraße</h3>
         <p>Koordinaten vorhanden. Priorität: hoch.</p>
-        <button class="btn btn-accent" data-modal="reparieren">Meldung hinzufügen</button>
       </article>
 
       <article class="card">
+        <img src="img/playground.jpg" alt="Spielplatz – defekte Schaukel" class="card-thumb">
         <h3>Spielplatz – defekte Schaukel</h3>
-        <p>Rosengartenweg, 10.05.2025</p>
-        <button class="btn btn-accent" data-modal="reparieren">Meldung hinzufügen</button>
+        <p>Rosengartenweg, 10.05.2025.</p>
       </article>
     </div>
+
+    <button class="btn btn-outline" data-modal="reparieren">Schaden melden</button>
   </section>
 
   <!-- About -->
@@ -96,26 +101,16 @@
     <p>© BuildSmart</p>
   </footer>
 
-  <!-- Demo Modal (no backend, just UX) -->
+  <!-- Modal -->
   <div id="modal" class="modal hidden">
     <div class="modal-box">
       <h3 id="modal-title">Beitrag hochladen</h3>
-      <form class="modal-form" onsubmit="event.preventDefault(); closeModal('Danke! Ihre Meldung wurde notiert. (Demo)');">
-        <label>Titel
-          <input required placeholder="Kurzer Titel">
-        </label>
-        <label>Ort
-          <input required placeholder="Straße / Koordinaten">
-        </label>
-        <label>Datum
-          <input type="date" required>
-        </label>
-        <label>Beschreibung
-          <textarea rows="3" placeholder="Kurz und präzise"></textarea>
-        </label>
-        <label>Datei (optional)
-          <input type="file" accept="image/*">
-        </label>
+      <form class="modal-form">
+        <label>Titel <input required placeholder="Kurzer Titel"></label>
+        <label>Ort <input required placeholder="Straße / Koordinaten"></label>
+        <label>Datum <input type="date" required></label>
+        <label>Beschreibung <textarea rows="3" placeholder="Kurz und präzise"></textarea></label>
+        <label>Datei (optional) <input type="file" accept="image/*"></label>
         <div class="modal-actions">
           <button class="btn btn-outline" type="button" onclick="closeModal()">Abbrechen</button>
           <button class="btn btn-accent" type="submit">Senden</button>
@@ -124,6 +119,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="scripts.js"></script>
 </body>
 </html>
