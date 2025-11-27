@@ -1,0 +1,76 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #F4F1EC;
+    color: #0C1B33;
+}
+
+
+.nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(244, 241, 236, 0.9);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid #D5D1CA;
+}
+
+.nav img {
+    height: 45px;
+}
+
+.nav a {
+    margin-left: 25px;
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    text-decoration: none;
+    color: #0C1B33;
+    transition: 0.3s ease;
+}
+
+.nav a:hover {
+    color: #C87968;
+}
+
+
+.hero {
+    height: 100vh;
+    background-image: url("citybg.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    text-align: center;
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+.hero-logo {
+    width: 180px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-family: 'Lora', serif;
+    font-size: 36px;
+    color: #C87968;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
