@@ -22,7 +22,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-// ==== BuildSmart: logic to append cards and persists ====
 (() => {
   let currentKind = 'ideen'; 
 
@@ -109,4 +108,20 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     form.reset();
   });
 })();
+/* === IMPROVED SECTION REVEAL === */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting){
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.25,
+  rootMargin: "0px 0px -10% 0px"
+});
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
 

@@ -13,7 +13,8 @@
   <!-- Top Nav -->
   <header class="topbar">
     <div class="brand">
-      <img src="img/logo.png" alt="BuildSmart Logo" onerror="this.style.display='none';document.querySelector('.brand span').style.display='inline'">
+      <img src="img/logo.png" alt="BuildSmart Logo"
+           onerror="this.style.display='none';document.querySelector('.brand span').style.display='inline'">
       <span style="display:none">BuildSmart</span>
     </div>
     <nav>
@@ -25,25 +26,25 @@
   </header>
 
   <!-- Hero -->
-  <section id="home" class="hero">
-  <div class="hero-content">
-    <h1 class="hero-title">
-      Entdecken · Vorschlagen · Verändern
-    </h1>
+  <section id="home" class="hero reveal">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Entdecken · Vorschlagen · Verändern
+      </h1>
 
-    <p class="hero-sub">Eine klare Plattform für nachhaltige Infrastruktur in deiner Stadt.</p>
+      <p class="hero-sub">
+        Eine klare Plattform für nachhaltige Infrastruktur in deiner Stadt.
+      </p>
 
-    <div class="hero-actions">
-      <a class="btn btn-accent" href="#ideen">Idee vorschlagen</a>
-      <a class="btn btn-outline" href="#reparieren">Schaden melden</a>
+      <div class="hero-actions">
+        <a class="btn btn-accent" href="#ideen">Idee vorschlagen</a>
+        <a class="btn btn-outline" href="#reparieren">Schaden melden</a>
+      </div>
     </div>
-
-  </div>
-</section>
-
+  </section>
 
   <!-- Ideen -->
-  <section id="ideen" class="grid two">
+  <section id="ideen" class="grid two reveal">
     <div class="section-head">
       <h2>Neue Ideen</h2>
       <p>Skizzen, Vorschläge, kleine Projekte. Kurz, klar, nachvollziehbar.</p>
@@ -61,18 +62,43 @@
         <h3>Solar auf Bushaltestellen</h3>
         <p>Energie für Beleuchtung und Anzeige.</p>
       </article>
+
+      <article class="card">
+        <img src="img/idee1.jpg" class="card-thumb" alt="Urbaner Gartenplatz">
+        <h3>Urbaner Gartenplatz</h3>
+        <p>Begrünte Sitzflächen für Innenhöfe und Wohnviertel.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/idee2.jpg" class="card-thumb" alt="Sichere Fahrradboxen">
+        <h3>Sichere Fahrradboxen</h3>
+        <p>Abschließbare, wetterfeste Boxen an Verkehrsknotenpunkten.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/idee3.jpg" class="card-thumb" alt="Mini-Solarlampen">
+        <h3>Mini-Solarlampen</h3>
+        <p>Kleine LED-Lampen entlang Gehwegen für bessere Orientierung.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/idee4.jpg" class="card-thumb" alt="Grüne Dächer">
+        <h3>Grüne Dächer</h3>
+        <p>Begrünte Dächer auf Bushaltestellen für Kühlung und Ästhetik.</p>
+      </article>
+      
     </div>
 
-<div class="btn-section">
-  <button class="btn" data-modal="ideen">Idee hinzufügen</button>
-</div>
+    <div class="btn-section">
+      <button class="btn" data-modal="ideen">Idee hinzufügen</button>
+    </div>
   </section>
 
   <!-- Reparieren -->
-  <section id="reparieren" class="grid two">
+  <section id="reparieren" class="grid two reveal">
     <div class="section-head">
       <h2>Reparieren</h2>
-      <p>Schäden mit Ort & Datum melden. Kurz beschreiben, Foto optional.</p>
+      <p>Schäden mit Ort &amp; Datum melden. Kurz beschreiben, Foto optional.</p>
     </div>
 
     <div class="cards" id="reparieren-list">
@@ -87,47 +113,71 @@
         <h3>Spielplatz – defekte Schaukel</h3>
         <p>Rosengartenweg, 10.05.2025.</p>
       </article>
+
+      <article class="card">
+        <img src="img/rep1.jpg" class="card-thumb" alt="Kaputter Bürgersteig">
+        <h3>Kaputter Bürgersteig</h3>
+        <p>Mehrere lose Steine — Stolpergefahr, dringend notwendig.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/rep2.jpg" class="card-thumb" alt="Graffiti an Hauswand">
+        <h3>Graffiti an Hauswand</h3>
+        <p>Ungenehmigte Schmiererei, Reinigung erforderlich.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/rep3.jpg" class="card-thumb" alt="Defekte Ampel">
+        <h3>Defekte Ampel</h3>
+        <p>Fußgängerampel schaltet unregelmäßig, hohes Risiko.</p>
+      </article>
+
+      <article class="card">
+        <img src="img/rep4.jpg" class="card-thumb" alt="Überfluteter Weg">
+        <h3>Überfluteter Weg</h3>
+        <p>Starke Pfützenbildung nach Regen — Drainage unzureichend.</p>
+      </article>
+
     </div>
 
-  <div class="btn-section">
-    <button class="btn btn-outline" data-modal="reparieren">Schaden melden</button>
-  </div>
+    <div class="btn-section">
+      <button class="btn btn-outline" data-modal="reparieren">Schaden melden</button>
+    </div>
   </section>
 
   <!-- About -->
-  <section id="about" class="about">
-  <h2>Über uns</h2>
+  <section id="about" class="about reveal">
+    <h2>Über uns</h2>
 
-  <p>
-    BuildSmart ist eine moderne Plattform zur Sammlung, Strukturierung 
-    und Bewertung von Ideen und Mängelmeldungen in städtischen Bereichen. 
-    Unser Ziel ist es, die Kommunikation zwischen Bürgerinnen, Bürgern 
-    und kommunalen Einrichtungen zu vereinfachen und Entscheidungen 
-    transparenter zu machen.
-  </p>
+    <p>
+      BuildSmart ist eine moderne Plattform zur Sammlung, Strukturierung
+      und Bewertung von Ideen und Mängelmeldungen in städtischen Bereichen.
+      Unser Ziel ist es, die Kommunikation zwischen Bürgerinnen, Bürgern
+      und kommunalen Einrichtungen zu vereinfachen und Entscheidungen
+      transparenter zu machen.
+    </p>
 
-  <p>
-    Die Plattform bietet zwei Bereiche: <strong>Neue Ideen</strong>, in denen 
-    Vorschläge für Verbesserungen eingereicht werden können, und 
-    <strong>Reparieren</strong>, wo Schäden mit Ort, Datum und optionalem Foto 
-    gemeldet werden. Jede Meldung wird klar dargestellt, damit 
-    Verwaltungsstellen sie schneller auswerten und priorisieren können.
-  </p>
+    <p>
+      Die Plattform bietet zwei Bereiche: <strong>Neue Ideen</strong>, in denen
+      Vorschläge für Verbesserungen eingereicht werden können, und
+      <strong>Reparieren</strong>, wo Schäden mit Ort, Datum und optionalem Foto
+      gemeldet werden. Jede Meldung wird klar dargestellt, damit
+      Verwaltungsstellen sie schneller auswerten und priorisieren können.
+    </p>
 
-  <p>
-    BuildSmart unterstützt nachhaltige Stadtentwicklung durch klare 
-    Datenerfassung, visuelle Übersicht und intuitive Bedienung. 
-    Unser Ansatz verbindet Urbanistik, Technologie und Bürgerbeteiligung 
-    in einem einzigen, übersichtlichen System.
-  </p>
+    <p>
+      BuildSmart unterstützt nachhaltige Stadtentwicklung durch klare
+      Datenerfassung, visuelle Übersicht und intuitive Bedienung.
+      Unser Ansatz verbindet Urbanistik, Technologie und Bürgerbeteiligung
+      in einem einzigen, übersichtlichen System.
+    </p>
 
-  <p>
-    Unser Anspruch ist es, eine Stadt zu gestalten, in der Ideen nicht 
-    verloren gehen und Probleme nicht übersehen werden – sondern klar, 
-    strukturiert und nachvollziehbar sichtbar sind.
-  </p>
-</section>
-
+    <p>
+      Unser Anspruch ist es, eine Stadt zu gestalten, in der Ideen nicht
+      verloren gehen und Probleme nicht übersehen werden – sondern klar,
+      strukturiert und nachvollziehbar sichtbar sind.
+    </p>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
