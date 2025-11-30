@@ -123,7 +123,9 @@ section.hero::after{
 .btn{
   cursor:pointer;
   display:inline-flex;
-  align-items:center; justify-content:center;
+  align-items:center;
+  justify-content:center;
+
   padding:12px 18px;
   border-radius:999px;
   font-weight:700;
@@ -132,25 +134,43 @@ section.hero::after{
   border:1px solid var(--accent);
   background:var(--accent);
   color:#fff;
+
   box-shadow:0 8px 18px rgba(200,121,104,.28);
 
-  transition:.15s ease;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    background-color .15s ease,
+    color .15s ease,
+    border-color .15s ease;
 }
+
 .btn:hover{
   transform:translateY(-2px);
   box-shadow:0 12px 26px rgba(200,121,104,.36);
 }
+
 .btn-outline{
   background:transparent;
   border-color:rgba(233,238,245,.92);
   color:var(--ink);
   box-shadow:inset 0 0 0 2px rgba(233,238,245,.92);
+
+  transition:
+    background-color .15s ease,
+    color .15s ease,
+    border-color .15s ease,
+    transform .15s ease,
+    box-shadow .15s ease;
 }
+
 .btn-outline:hover{
   background:rgba(233,238,245,.08);
   color:#fff;
   box-shadow:inset 0 0 0 2px var(--accent);
+  transform:translateY(-2px);
 }
+
 
 /* ================================================
    SECTION LAYOUT (HEADER · CARDS · BUTTONS)
@@ -319,3 +339,22 @@ section.hero::after{
   .hero-panel{padding:24px}
   .hero-title{font-size:clamp(22px,7vw,34px)}
 }
+
+/* ===== FIX HERO BUTTONS ===== */
+section.hero::before,
+section.hero::after{
+  pointer-events: none;   /* клики проходят сквозь слой */
+  z-index: 0;             /* ниже контента hero */
+}
+
+.hero-panel{
+  position: relative;
+  z-index: 1;
+}
+
+.hero-actions .btn{
+  position: relative;
+  z-index: 2;
+}
+/* ===== END FIX ===== */
+
