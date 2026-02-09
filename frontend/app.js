@@ -31,9 +31,14 @@ document.addEventListener("click", (e) => {
 
 const btnGo = document.getElementById("goToPosts");
 if (btnGo){
-  btnGo.addEventListener("click", () => {
+  btnGo.addEventListener("click", async () => {
+    const wrap = document.getElementById("postsWrap");
     const sec = document.getElementById("postsSection");
-    if (!sec) return;
+    if (!wrap || !sec) return;
+
+    wrap.style.display = "block";
+    await loadLists();
+
     sec.scrollIntoView({behavior:"smooth", block:"start"});
     sec.style.outline = "3px solid rgba(165,101,95,0.35)";
     setTimeout(() => sec.style.outline = "none", 900);
@@ -190,4 +195,4 @@ async function loadComments(postId){
   }).join("");
 }
 
-loadLists();
+// loadLists();

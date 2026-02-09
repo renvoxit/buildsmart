@@ -6,7 +6,7 @@
   --muted:#666;
 
   --accent:#A5655F;     
-  --accent2:#B07873;   
+  --accent2:#B07873; 
 
   --border:#E8E8E8;
   --soft:#F6F6F6;
@@ -235,7 +235,7 @@ header{
   width:160px;
   height:160px;
   object-fit:contain;
-  filter: invert(1); 
+  filter: invert(1); /* чтобы белым смотрелось */
 }
 
 /* Leistungen блок (розовый фон + фото справа) */
