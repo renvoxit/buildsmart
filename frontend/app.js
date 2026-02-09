@@ -39,6 +39,10 @@ if (btnGo){
     wrap.style.display = "block";
     await loadLists();
 
+    // Upload-Dialog direkt öffnen
+    selectShareTab("vorschlag");
+    openModal("modalShare");
+
     sec.scrollIntoView({behavior:"smooth", block:"start"});
     sec.style.outline = "3px solid rgba(165,101,95,0.35)";
     setTimeout(() => sec.style.outline = "none", 900);
@@ -47,8 +51,35 @@ if (btnGo){
 
 const openVorschlag = document.getElementById("openVorschlag");
 const openAnmerkung = document.getElementById("openAnmerkung");
-if (openVorschlag) openVorschlag.addEventListener("click", () => openModal("modalV"));
-if (openAnmerkung) openAnmerkung.addEventListener("click", () => openModal("modalA"));
+if (openVorschlag) openVorschlag.addEventListener("click", () => {
+  selectShareTab("vorschlag");
+  openModal("modalShare");
+});
+if (openAnmerkung) openAnmerkung.addEventListener("click", () => {
+  selectShareTab("anmerkung");
+  openModal("modalShare");
+});
+
+// Tabs im Upload-Modal
+function selectShareTab(tab){
+  const tv = document.getElementById("tabV");
+  const ta = document.getElementById("tabA");
+  const fv = document.getElementById("tabFormV");
+  const fa = document.getElementById("tabFormA");
+  if (!tv || !ta || !fv || !fa) return;
+
+  const isV = tab === "vorschlag";
+  tv.classList.toggle("active", isV);
+  ta.classList.toggle("active", !isV);
+  fv.style.display = isV ? "block" : "none";
+  fa.style.display = isV ? "none" : "block";
+}
+
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-share-tab]");
+  if (!t) return;
+  selectShareTab(t.getAttribute("data-share-tab"));
+});
 
 function postItemHTML(p){
   const img = p.image_path ? `${API}/uploads/${p.image_path}` : "./assets/placeholder-thumb.jpg";
@@ -123,8 +154,8 @@ async function submitPost(formId, statusId, modalId){
   });
 }
 
-submitPost("formV", "statusV", "modalV");
-submitPost("formA", "statusA", "modalA");
+submitPost("formV", "statusV", "modalShare");
+submitPost("formA", "statusA", "modalShare");
 
 document.addEventListener("click", async (e) => {
   const vbtn = e.target.closest("[data-vote]");
@@ -186,7 +217,7 @@ async function loadComments(postId){
       ? `<div style="margin-top:6px;"><a href="${API}/uploads/${c.file_path}" target="_blank">📎 Datei öffnen</a></div>`
       : "";
     return `
-      <div style="background:#fff; padding:10px; border:1px solid #ddd;">
+      <div class="commentCard">
         <div style="color:#777; font-size:13px;">${escapeHtml(c.created_at)}</div>
         <div style="margin-top:6px; color:#444;">${escapeHtml(c.text)}</div>
         ${file}
