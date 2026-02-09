@@ -14,6 +14,7 @@
       <div class="logoTitle">Build Smart</div>
     </div>
   </div>
+
   <div class="navwrap">
     <div class="line"></div>
     <nav class="nav">
@@ -25,127 +26,135 @@
   </div>
 </header>
 
-<main class="container">
-  <section class="centerBlock">
-    <h1>Neue Ideen und beschädigte Objekte</h1>
+<div class="container">
 
-    <p class="lead">
-      Reiche eine Idee (Vorschlag) oder eine Beobachtung (Anmerkung) ein.
-      Optional kannst du ein Foto hinzufügen, eine Adresse angeben und kurz erklären, warum das wichtig ist.
+  <div class="centerBlock">
+    <h1>Neue Ideen und Beschädigte Objekte</h1>
+    <p style="max-width:900px; margin: 0 auto; color:#666; line-height:1.55;">
+      Reiche einen <b>Vorschlag</b> (Idee) oder eine <b>Anmerkung</b> (Problem/Beobachtung) ein.
+      Du kannst ein Foto hinzufügen, eine Adresse angeben und kurz beschreiben, was du meinst.
     </p>
+    <div style="margin-top:16px;">
+      <button class="btn" id="goToPosts">Teilen</button>
+    </div>
+  </div>
 
-    <button class="btn" id="goToPosts">Teilen</button>
+  <!-- СЕКЦИЯ ПОСТОВ (может быть видна сразу, но ты хотела через "Teilen" — оставляю видимой,
+       потому что "Teilen" у тебя теперь для создания/выбора. Если хочешь прятать ленту до первого поста —
+       скажешь, сделаю. -->
+  <div style="text-align:center; color:#666; margin: 10px 0 18px;">
+    Deine Vorschläge und Anmerkungen
+  </div>
 
-    <div class="hintBox">
-      <b>So funktioniert’s:</b>
-      <ol>
-        <li>Klicke auf <b>Teilen</b>.</li>
-        <li>Wähle <b>Vorschlag</b> oder <b>Anmerkung</b> und fülle das Formular aus.</li>
-        <li>Dein Beitrag erscheint unten in der Liste. Andere können <b>voten</b> und <b>kommentieren</b> (ohne E‑Mail).</li>
-      </ol>
+  <section class="twocol" id="postsSection">
+    <div class="panel">
+      <div class="panelHead">Vorschläge</div>
+      <div class="panelBody" id="listVorschlag"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panelHead" style="text-align:center;">Anmerkungen</div>
+      <div class="panelBody" id="listAnmerkung"></div>
     </div>
   </section>
+</div>
 
-  <!-- LISTEN (werden erst nach "Teilen" sichtbar) -->
-  <section id="postsWrap" class="postsWrap" style="display:none;">
-    <div class="sectionTitle">Deine Vorschläge und Anmerkungen</div>
-
-    <div class="twocol" id="postsSection">
-      <div class="panel">
-        <div class="panelHead">Vorschläge</div>
-        <div class="panelBody" id="listVorschlag"></div>
-        <div class="panelFooter">
-          <button class="uploadBtn" id="openVorschlag">Hochladen</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panelHead" style="text-align:center;">Anmerkungen</div>
-        <div class="panelBody" id="listAnmerkung"></div>
-        <div class="panelFooter">
-          <button class="uploadBtn" id="openAnmerkung">Hochladen</button>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- MODAL: Upload (Tabs) -->
-<div class="modalBack" id="modalShare">
-  <div class="modal modalWide">
+<!-- ===== SHARE MODAL (НА ПЕРЕДНЕМ ПЛАНЕ) ===== -->
+<div id="shareModal" class="modalBack" style="display:none;">
+  <div class="modal shareModal">
     <div class="modalHead">
-      <b>Beitrag teilen</b>
-      <button class="closeBtn" data-close="modalShare">×</button>
+      <b>Teilen</b>
+      <button class="closeBtn" data-close="shareModal">×</button>
     </div>
 
+    <div class="shareGrid">
+      <div class="shareCard">
+        <div class="shareCardTitle">Vorschläge</div>
+        <div class="shareCardText">
+          Idee vorschlagen, Verbesserung planen, Projekt starten.
+        </div>
+        <button class="btn" id="shareOpenV">Vorschlag erstellen</button>
+      </div>
+
+      <div class="shareCard">
+        <div class="shareCardTitle">Anmerkungen</div>
+        <div class="shareCardText">
+          Problem melden, Gefahr markieren, beschädigte Stelle dokumentieren.
+        </div>
+        <button class="btn" id="shareOpenA">Anmerkung erstellen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: VORSCHLAG ===== -->
+<div class="modalBack" id="modalV" style="display:none;">
+  <div class="modal">
+    <div class="modalHead">
+      <b>Vorschlag hochladen</b>
+      <button class="closeBtn" data-close="modalV">×</button>
+    </div>
     <div class="modalBody">
-      <div class="tabs">
-        <button class="tabBtn isActive" type="button" data-tab="v">Vorschlag</button>
-        <button class="tabBtn" type="button" data-tab="a">Anmerkung</button>
-      </div>
+      <form id="formV">
+        <input type="hidden" name="category" value="vorschlag"/>
 
-      <div class="tabPanel isActive" data-panel="v">
-        <div class="miniHint">
-          <b>Vorschlag</b> = neue Idee / Projekt. Schreib kurz und klar: <i>Wo?</i> <i>Was?</i> <i>Warum?</i>
+        <div class="row">
+          <div>
+            <div class="fieldLabel">Adresse</div>
+            <input class="input" name="address" required
+              placeholder="Adresse eingeben (Straße, Hausnummer)"/>
+          </div>
+          <div>
+            <div class="fieldLabel">Foto (optional)</div>
+            <input class="input" type="file" name="image" accept="image/*"/>
+          </div>
         </div>
 
-        <form id="formV" class="niceForm">
-          <input type="hidden" name="category" value="vorschlag"/>
+        <div class="fieldLabel">Idee</div>
+        <textarea class="input" name="description" required
+          placeholder="Beschreibe deinen Vorschlag: Was soll verbessert werden und warum?"></textarea>
 
-          <div class="row">
-            <div>
-              <div class="fieldLabel">Adresse*</div>
-              <input class="input" name="address" required
-                     placeholder="z.B. Kaiserstraße 6"/>
-            </div>
-            <div>
-              <div class="fieldLabel">Foto (optional)</div>
-              <input class="input" type="file" name="image" accept="image/*"/>
-            </div>
+        <div class="modalActions">
+          <button class="btn" type="submit">Teilen</button>
+          <span class="status" id="statusV"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: ANMERKUNG ===== -->
+<div class="modalBack" id="modalA" style="display:none;">
+  <div class="modal">
+    <div class="modalHead">
+      <b>Anmerkung hochladen</b>
+      <button class="closeBtn" data-close="modalA">×</button>
+    </div>
+    <div class="modalBody">
+      <form id="formA">
+        <input type="hidden" name="category" value="anmerkung"/>
+
+        <div class="row">
+          <div>
+            <div class="fieldLabel">Adresse</div>
+            <input class="input" name="address" required
+              placeholder="Wo ist das Problem? (Straße, Hausnummer)"/>
           </div>
-
-          <div class="fieldLabel">Idee*</div>
-          <textarea class="input" name="description" required
-                    placeholder="Was schlägst du vor? (kurz, verständlich)"></textarea>
-
-          <div class="modalActions">
-            <button class="btn" type="submit">Absenden</button>
-            <span class="status" id="statusV"></span>
+          <div>
+            <div class="fieldLabel">Foto (optional)</div>
+            <input class="input" type="file" name="image" accept="image/*"/>
           </div>
-        </form>
-      </div>
-
-      <div class="tabPanel" data-panel="a">
-        <div class="miniHint">
-          <b>Anmerkung</b> = Problem / Schaden / Gefahr. Schreib: <i>Wo?</i> <i>Was genau?</i> <i>Wie dringend?</i>
         </div>
 
-        <form id="formA" class="niceForm">
-          <input type="hidden" name="category" value="anmerkung"/>
+        <div class="fieldLabel">Anmerkung</div>
+        <textarea class="input" name="description" required
+          placeholder="Was ist kaputt/gefährlich/problematisch? Kurz beschreiben."></textarea>
 
-          <div class="row">
-            <div>
-              <div class="fieldLabel">Adresse*</div>
-              <input class="input" name="address" required
-                     placeholder="z.B. Lindenstraße 2"/>
-            </div>
-            <div>
-              <div class="fieldLabel">Foto (optional)</div>
-              <input class="input" type="file" name="image" accept="image/*"/>
-            </div>
-          </div>
-
-          <div class="fieldLabel">Anmerkung*</div>
-          <textarea class="input" name="description" required
-                    placeholder="Was ist passiert / was ist kaputt? (kurz, konkret)"></textarea>
-
-          <div class="modalActions">
-            <button class="btn" type="submit">Absenden</button>
-            <span class="status" id="statusA"></span>
-          </div>
-        </form>
-      </div>
-
+        <div class="modalActions">
+          <button class="btn" type="submit">Teilen</button>
+          <span class="status" id="statusA"></span>
+        </div>
+      </form>
     </div>
   </div>
 </div>
