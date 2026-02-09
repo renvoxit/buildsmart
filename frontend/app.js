@@ -1,4 +1,4 @@
-const API = "http://localhost:5000"; // потом заменишь на URL деплоя
+const API = "http://127.0.0.1:5000";
 
 async function fetchJSON(url, opts) {
   const r = await fetch(url, opts);
@@ -14,30 +14,48 @@ function closeModal(id){
   document.getElementById(id).style.display = "none";
 }
 
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
 document.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-close]");
   if (btn) closeModal(btn.getAttribute("data-close"));
-  // клик по фону модалки
-  const back = e.target.classList.contains("modalBack");
-  if (back) e.target.style.display = "none";
+  if (e.target.classList.contains("modalBack")) e.target.style.display = "none";
 });
+
+const btnGo = document.getElementById("goToPosts");
+if (btnGo){
+  btnGo.addEventListener("click", () => {
+    const sec = document.getElementById("postsSection");
+    if (!sec) return;
+    sec.scrollIntoView({behavior:"smooth", block:"start"});
+    sec.style.outline = "3px solid rgba(165,101,95,0.35)";
+    setTimeout(() => sec.style.outline = "none", 900);
+  });
+}
 
 const openVorschlag = document.getElementById("openVorschlag");
 const openAnmerkung = document.getElementById("openAnmerkung");
-const openMainShare = document.getElementById("openMainShare");
 if (openVorschlag) openVorschlag.addEventListener("click", () => openModal("modalV"));
 if (openAnmerkung) openAnmerkung.addEventListener("click", () => openModal("modalA"));
-if (openMainShare) openMainShare.addEventListener("click", () => openModal("modalV")); // кнопка “Teilen” открывает Vorschlag
 
 function postItemHTML(p){
   const img = p.image_path ? `${API}/uploads/${p.image_path}` : "./assets/placeholder-thumb.jpg";
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
+
   return `
     <div class="item">
       <img class="thumb" src="${img}" alt="thumb"/>
       <div class="itemText">
         <div><b>Adresse:</b> ${escapeHtml(p.address)}</div>
         <div><b>${label}:</b> ${escapeHtml(p.description)}</div>
+
         <div class="voteRow">
           <button class="voteBtn" data-vote="${p.id}">👍 Vote</button>
           <span style="color:#666;">${p.votes}</span>
@@ -48,8 +66,9 @@ function postItemHTML(p){
           <div id="commentsList-${p.id}" style="display:grid; gap:8px;"></div>
 
           <form data-comment-form="${p.id}" style="margin-top:10px;">
-            <div class="fieldLabel" style="margin:0 0 6px;">Nachricht*</div>
-            <textarea class="input" name="text" required placeholder="Kommentar (ohne E-Mail)"></textarea>
+            <div class="fieldLabel" style="margin:0 0 6px;">Kommentar*</div>
+            <textarea class="input" name="text" required
+                      placeholder="Schreibe deinen Kommentar hier (ohne E-Mail)…"></textarea>
 
             <div class="fieldLabel" style="margin:12px 0 6px;">Datei (optional)</div>
             <input class="input" type="file" name="file"/>
@@ -64,15 +83,6 @@ function postItemHTML(p){
       </div>
     </div>
   `;
-}
-
-function escapeHtml(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
 }
 
 async function loadLists(){
@@ -112,7 +122,6 @@ submitPost("formV", "statusV", "modalV");
 submitPost("formA", "statusA", "modalA");
 
 document.addEventListener("click", async (e) => {
-  // vote
   const vbtn = e.target.closest("[data-vote]");
   if (vbtn){
     const id = vbtn.getAttribute("data-vote");
@@ -124,16 +133,16 @@ document.addEventListener("click", async (e) => {
     }
   }
 
-  // toggle comments
   const tbtn = e.target.closest("[data-toggle-comments]");
   if (tbtn){
     const id = tbtn.getAttribute("data-toggle-comments");
     const box = document.getElementById(`comments-${id}`);
     if (!box) return;
-    box.style.display = box.style.display === "none" ? "block" : "none";
-    if (box.style.display === "block"){
-      await loadComments(id);
-    }
+
+    const open = box.style.display === "block";
+    box.style.display = open ? "none" : "block";
+
+    if (!open) await loadComments(id);
   }
 });
 
@@ -141,11 +150,12 @@ document.addEventListener("submit", async (e) => {
   const form = e.target.closest("[data-comment-form]");
   if (!form) return;
   e.preventDefault();
+
   const postId = form.getAttribute("data-comment-form");
   const status = document.getElementById(`cstatus-${postId}`);
   status.textContent = "Sende…";
-  const fd = new FormData(form);
 
+  const fd = new FormData(form);
   try{
     await fetchJSON(`${API}/api/posts/${postId}/comments`, { method:"POST", body: fd });
     form.reset();
@@ -159,14 +169,16 @@ document.addEventListener("submit", async (e) => {
 async function loadComments(postId){
   const list = document.getElementById(`commentsList-${postId}`);
   if (!list) return;
+
   const items = await fetchJSON(`${API}/api/posts/${postId}/comments`);
   if (!items.length){
     list.innerHTML = `<div style="color:#777;">Noch keine Kommentare.</div>`;
     return;
   }
+
   list.innerHTML = items.map(c => {
     const file = c.file_path
-      ? `<div><a href="${API}/uploads/${c.file_path}" target="_blank">📎 Datei öffnen</a></div>`
+      ? `<div style="margin-top:6px;"><a href="${API}/uploads/${c.file_path}" target="_blank">📎 Datei öffnen</a></div>`
       : "";
     return `
       <div style="background:#fff; padding:10px; border:1px solid #ddd;">

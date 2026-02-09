@@ -10,7 +10,6 @@
 <header>
   <div class="topbar">
     <div class="logo">
-      <!-- СЮДА ВСТАВИТЬ ТВОЙ ЛОГО/СИМВОЛ: frontend/assets/logo.png -->
       <img src="./assets/logo.png" alt="Logo"/>
       <div class="logoTitle">Build Smart</div>
     </div>
@@ -29,19 +28,21 @@
 <div class="container">
   <div class="centerBlock">
     <div class="bigCircle">
-      <!-- СЮДА ВСТАВИТЬ ИКОНКУ (скрепка/что угодно): frontend/assets/icon-clip.png -->
       <img src="./assets/icon-clip.png" alt="Icon"/>
     </div>
     <h1>Neue Ideen und Beschädigte Objekte</h1>
-    <p>Hier kannst du deine Fotos und Beschreibung hinzufügen.</p>
-    <button class="btn" id="openMainShare">Teilen</button>
+    <p>
+      Reiche eine Idee (Vorschlag) oder eine Beobachtung (Anmerkung) ein.
+      Du kannst ein Foto hinzufügen, eine Adresse angeben und kurz beschreiben, was du meinst.
+    </p>
+    <button class="btn" id="goToPosts">Teilen</button>
   </div>
 
   <div style="text-align:center; color:#666; margin-top:18px;">
     Deine Vorschläge und Anmerkungen
   </div>
 
-  <section class="twocol">
+  <section class="twocol" id="postsSection">
     <div class="panel">
       <div class="panelHead">Vorschläge</div>
       <div class="panelBody" id="listVorschlag"></div>
@@ -59,14 +60,6 @@
     </div>
   </section>
 
-  <section class="comments">
-    <h2>Kommentar hinzufügen</h2>
-    <div class="helper">Kommentare добавляются к конкретному посту: выбираешь пост и пишешь. Никакой почты.</div>
-    <div class="helper" style="margin-top:6px;">
-      Под постами есть “Kommentare” и форма.
-    </div>
-  </section>
-</div>
 
 <!-- MODAL: Vorschlag -->
 <div class="modalBack" id="modalV">
@@ -78,18 +71,23 @@
     <div class="modalBody">
       <form id="formV">
         <input type="hidden" name="category" value="vorschlag"/>
+
         <div class="row">
           <div>
             <div class="fieldLabel">Adresse*</div>
-            <input class="input" name="address" required placeholder="z.B. Kaiserstraße 6"/>
+            <input class="input" name="address" required
+                   placeholder="z.B. Kaiserstraße 6 (Ort/Adresse)"/>
           </div>
           <div>
-            <div class="fieldLabel">Foto</div>
+            <div class="fieldLabel">Foto (optional)</div>
             <input class="input" type="file" name="image" accept="image/*"/>
           </div>
         </div>
+
         <div class="fieldLabel">Idee*</div>
-        <textarea class="input" name="description" required placeholder="Beschreibe deine Idee..."></textarea>
+        <textarea class="input" name="description" required
+                  placeholder="Was schlägst du vor? Warum ist das wichtig? (kurz)"></textarea>
+
         <div class="modalActions">
           <button class="btn" type="submit">Teilen</button>
           <span class="status" id="statusV"></span>
@@ -109,18 +107,23 @@
     <div class="modalBody">
       <form id="formA">
         <input type="hidden" name="category" value="anmerkung"/>
+
         <div class="row">
           <div>
             <div class="fieldLabel">Adresse*</div>
-            <input class="input" name="address" required placeholder="z.B. Lindenstraße 2"/>
+            <input class="input" name="address" required
+                   placeholder="z.B. Lindenstraße 2 (Ort/Adresse)"/>
           </div>
           <div>
-            <div class="fieldLabel">Foto</div>
+            <div class="fieldLabel">Foto (optional)</div>
             <input class="input" type="file" name="image" accept="image/*"/>
           </div>
         </div>
+
         <div class="fieldLabel">Anmerkung*</div>
-        <textarea class="input" name="description" required placeholder="Was hast du entdeckt?"></textarea>
+        <textarea class="input" name="description" required
+                  placeholder="Was hast du entdeckt? Welche Gefahr / welches Problem? (kurz)"></textarea>
+
         <div class="modalActions">
           <button class="btn" type="submit">Teilen</button>
           <span class="status" id="statusA"></span>

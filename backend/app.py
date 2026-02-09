@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "db.sqlite3")
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
@@ -18,6 +19,11 @@ app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 CORS(app)
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+@app.route("/")
+def hom4e():
+    return "Hello, Build Smart!"
 
 
 def db():
