@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Los geht’s! | Build Smart</title>
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <img src="./assets/SYMBOL_PLACEHOLDER.svg" alt="Build Smart"/>
+      <span>Build Smart</span>
+    </div>
+    <nav class="menu">
+      <a href="./index.html">Home</a>
+      <a href="./ueber-uns.html">Über uns</a>
+      <a href="./leistungen.html">Leistungen</a>
+      <a href="./los-gehts.html"><b>Los geht’s!</b></a>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+  <h1>Neue Ideen und beschädigte Objekte</h1>
+  <p>Hier kannst du deine Fotos und Beschreibung hinzufügen.</p>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Vorschläge</h2>
+      <form id="formVorschlag">
+        <input type="hidden" name="category" value="vorschlag"/>
+        <label>Titel</label>
+        <input name="title" placeholder="Kurzer Titel" required minlength="2"/>
+        <label>Beschreibung</label>
+        <textarea name="description" placeholder="Was ist deine Idee?" required minlength="5"></textarea>
+        <label>Foto</label>
+        <input type="file" name="image" accept="image/*"/>
+        <div class="row" style="margin-top:12px">
+          <button class="btn" type="submit">Teilen</button>
+          <span class="small" id="vorschlagStatus"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Anmerkungen</h2>
+      <form id="formAnmerkung">
+        <input type="hidden" name="category" value="anmerkung"/>
+        <label>Titel</label>
+        <input name="title" placeholder="Kurzer Titel" required minlength="2"/>
+        <label>Beschreibung</label>
+        <textarea name="description" placeholder="Was hast du entdeckt?" required minlength="5"></textarea>
+        <label>Foto</label>
+        <input type="file" name="image" accept="image/*"/>
+        <div class="row" style="margin-top:12px">
+          <button class="btn" type="submit">Teilen</button>
+          <span class="small" id="anmerkungStatus"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <h2 style="margin-top:28px">Feed</h2>
+  <div id="feed" style="display:grid; gap:14px;"></div>
+</main>
+
+<footer>© 2025 - 2026 Build Smart</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
