@@ -26,6 +26,12 @@ def hom4e():
     return "Hello, Build Smart!"
 
 
+@app.get("/favicon.ico")
+def favicon():
+    # Nicht wichtig für das Projekt, aber verhindert 404-Spam im Terminal.
+    return ("", 204)
+
+
 def db():
     con = sqlite3.connect(DB_PATH)
     con.row_factory = sqlite3.Row
