@@ -45,6 +45,10 @@ header{
   width:62px;
   height:62px;
   object-fit:contain;
+  background:#fff;
+  border-radius:8px;
+  padding:4px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.06);
 }
 .logoTitle{
   font-family:"Playfair Display", Georgia, serif;
@@ -225,17 +229,18 @@ header{
   width:320px;
   height:320px;
   border-radius:50%;
-  background:var(--accent);
+  background:transparent;
   display:flex;
   align-items:center;
   justify-content:center;
   margin:0 auto;
+  overflow:hidden;
 }
 .circleIcon img{
-  width:160px;
-  height:160px;
+  width:82%;
+  height:82%;
   object-fit:contain;
-  filter: invert(1); /* чтобы белым смотрелось */
+  filter:none;
 }
 
 /* Leistungen блок (розовый фон + фото справа) */
@@ -302,10 +307,14 @@ header{
   margin:0 0 12px;
 }
 .centerBlock p{
-  margin:0;
+  margin:10px auto 0;
+  max-width:820px;
   color:#666;
   font-size:18px;
+  line-height:1.55;
 }
+
+.lead{ margin-top:14px; }
 
 /* Две колонки Vorschläge/Anmerkungen */
 .twocol{
@@ -331,16 +340,21 @@ header{
 }
 .item{
   display:grid;
-  grid-template-columns:90px 1fr;
-  gap:12px;
-  padding:10px 0;
-  border-bottom:1px solid #ddd;
+  grid-template-columns:110px 1fr;
+  gap:14px;
+  padding:12px;
+  margin:0 0 12px;
+  background:#fff;
+  border:1px solid #e2e2e2;
+  border-radius:16px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.04);
 }
 .thumb{
-  width:90px;
-  height:90px;
+  width:110px;
+  height:110px;
   object-fit:cover;
   background:#ddd;
+  border-radius:14px;
 }
 .itemText{
   font-size:16px;
@@ -348,6 +362,37 @@ header{
   color:#555;
 }
 .itemText b{ color:#333; }
+
+.voteRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+}
+.voteBtn{
+  border:1px solid #e0e0e0;
+  background:#fff;
+  padding:8px 10px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  color:#444;
+}
+.voteBtn:hover{ background:#fafafa; }
+
+/* Comments inside posts */
+[id^="comments-"]{
+  background:#fbfbfb;
+  border:1px solid #e8e8e8;
+  border-radius:14px;
+}
+
+.commentCard{
+  background:#fff;
+  padding:10px;
+  border:1px solid #e7e7e7;
+  border-radius:12px;
+}
 .panelFooter{
   padding:16px 12px 18px;
   background:var(--soft);
@@ -435,6 +480,28 @@ textarea.input{
 .modalBody{
   padding:14px;
 }
+
+.tabBar{
+  display:flex;
+  gap:10px;
+  margin:12px 0 10px;
+}
+.tabBtn{
+  flex:1;
+  border:1px solid #e3e3e3;
+  background:#fff;
+  border-radius:12px;
+  padding:12px 14px;
+  font-weight:700;
+  cursor:pointer;
+  color:#444;
+}
+.tabBtn:hover{ background:#fafafa; }
+.tabBtn.active{
+  border-color: rgba(165,101,95,0.45);
+  box-shadow: 0 0 0 4px rgba(165,101,95,0.12);
+}
+.tabPanel{ margin-top:8px; }
 .row{
   display:grid;
   grid-template-columns:1fr 1fr;
