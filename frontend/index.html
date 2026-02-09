@@ -8,39 +8,47 @@
 </head>
 <body>
 <header>
-  <div class="nav">
-    <div class="brand">
-      <!-- СЮДА ВСТАВИТЬ ТВОЙ СИМВОЛ: frontend/assets/SYMBOL_PLACEHOLDER.svg -->
-      <img src="./assets/SYMBOL_PLACEHOLDER.svg" alt="Build Smart"/>
-      <span>Build Smart</span>
+  <div class="topbar">
+    <div class="logo">
+      <!-- ЛОГО -->
+      <img src="./assets/logo.png" alt="Logo"/>
+      <div class="logoTitle">Build Smart</div>
     </div>
-    <nav class="menu">
-      <a href="./index.html">Home</a>
-      <a href="./ueber-uns.html">Über uns</a>
-      <a href="./leistungen.html">Leistungen</a>
+  </div>
+  <div class="navwrap">
+    <div class="line"></div>
+    <nav class="nav">
+      <a class="active" href="./index.html">HOME</a>
+      <a href="./ueber-uns.html">ÜBER UNS</a>
+      <a href="./leistungen.html">LEISTUNGEN</a>
     </nav>
+    <div class="line"></div>
   </div>
 </header>
 
-<main class="main">
-  <section class="hero">
-    <div class="heroCard">
-      <h1>Willkommen bei Build Smart</h1>
-      <p><b>Wir entdecken, vorschlagen und verändern.</b></p>
-      <a class="btn" href="./los-gehts.html">Los geht’s!</a>
+<div class="hero">
+  <!-- СЮДА ВСТАВИТЬ ФОТО ГОРОДА: frontend/assets/hero-city.jpg -->
+  <img src="./assets/hero-city.jpg" alt="City"/>
+  <div class="heroOverlay">
+    <h1>Willkommen bei Build Smart</h1>
+    <p>Wir entdecken, vorschlagen und verändern.</p>
+    <a class="btn" href="./los-gehts.html">Los geht’s!</a>
+  </div>
+</div>
 
+<section class="band">
+  <div class="bandInner">
+    <div>
       <h2>BuildSmart</h2>
-      <p>Bringe deine Stadt auf das nächste Level — fotografiere Probleme, teile Ideen und gestalte aktiv deine Umgebung mit.
-        Mit BuildSmart wird jeder Bewohner zum Mitgestalter eines modernen, sicheren und lebenswerten Stadtbildes.</p>
+      <p>
+        Bringe deine Stadt auf das nächste Level – fotografiere Probleme, teile Ideen und gestalte aktiv deine Umgebung mit.
+        Mit BuildSmart wird jeder Bewohner zum Mitgestalter eines modernen, sicheren und lebenswerten Stadtbildes.
+      </p>
     </div>
-
-    <div class="card">
-      <!-- СЮДА ВСТАВИТЬ ГЛАВНОЕ ФОТО -->
-      <img src="./assets/hero-placeholder.jpg" alt="Hero" style="width:100%; border-radius:14px; border:1px solid var(--border)"/>
-      <p class="small">Platzhalter-Bild. Du ersetzt es später.</p>
-    </div>
-  </section>
-</main>
+    <!-- СЮДА ВСТАВИТЬ КАРТИНКУ СПРАВА: frontend/assets/box-sketch.jpg -->
+    <img src="./assets/box-sketch.jpg" alt="Sketch"/>
+  </div>
+</section>
 
 <footer>© 2025 - 2026 Build Smart</footer>
 </body>

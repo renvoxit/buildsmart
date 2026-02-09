@@ -3,7 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS posts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   category TEXT NOT NULL CHECK(category IN ('vorschlag','anmerkung')),
-  title TEXT NOT NULL,
+  address TEXT NOT NULL,
   description TEXT NOT NULL,
   image_path TEXT,
   created_at TEXT NOT NULL,

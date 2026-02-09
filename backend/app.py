@@ -11,7 +11,6 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 
 ALLOWED_IMAGE_EXT = {"png", "jpg", "jpeg", "webp"}
 ALLOWED_FILE_EXT = {"png", "jpg", "jpeg", "webp", "pdf", "txt"}
-
 MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10MB
 
 app = Flask(__name__)
@@ -50,7 +49,6 @@ def save_upload(file, allowed_ext: set[str]) -> str:
     filename = secure_filename(file.filename or "")
     if not filename or not ext_ok(filename, allowed_ext):
         raise ValueError("Invalid file type")
-    # уникализируем имя
     stamp = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")
     ext = filename.rsplit(".", 1)[1].lower()
     stored = f"{stamp}.{ext}"
@@ -66,23 +64,29 @@ def health():
 
 @app.get("/api/posts")
 def list_posts():
+    category = request.args.get("category")
     with db() as con:
-        rows = con.execute(
-            "SELECT * FROM posts ORDER BY id DESC"
-        ).fetchall()
+        if category in ("vorschlag", "anmerkung"):
+            rows = con.execute(
+                "SELECT * FROM posts WHERE category=? ORDER BY id DESC",
+                (category,)
+            ).fetchall()
+        else:
+            rows = con.execute(
+                "SELECT * FROM posts ORDER BY id DESC").fetchall()
     return jsonify([dict(r) for r in rows])
 
 
 @app.post("/api/posts")
 def create_post():
-    data_title = request.form.get("title", "").strip()
-    data_desc = request.form.get("description", "").strip()
     category = request.form.get("category", "").strip()
+    address = request.form.get("address", "").strip()
+    desc = request.form.get("description", "").strip()
 
     if category not in ("vorschlag", "anmerkung"):
         return jsonify({"error": "Invalid category"}), 400
-    if len(data_title) < 2 or len(data_desc) < 5:
-        return jsonify({"error": "Title/description too short"}), 400
+    if len(address) < 2 or len(desc) < 5:
+        return jsonify({"error": "Address/description too short"}), 400
 
     image_name = None
     if "image" in request.files and request.files["image"].filename:
@@ -93,8 +97,8 @@ def create_post():
 
     with db() as con:
         cur = con.execute(
-            "INSERT INTO posts(category,title,description,image_path,created_at) VALUES(?,?,?,?,?)",
-            (category, data_title, data_desc, image_name, now_iso())
+            "INSERT INTO posts(category,address,description,image_path,created_at) VALUES(?,?,?,?,?)",
+            (category, address, desc, image_name, now_iso())
         )
         post_id = cur.lastrowid
         row = con.execute("SELECT * FROM posts WHERE id=?",
@@ -124,7 +128,8 @@ def list_comments(post_id: int):
         if not exists:
             return jsonify({"error": "Not found"}), 404
         rows = con.execute(
-            "SELECT * FROM comments WHERE post_id=? ORDER BY id ASC", (post_id,)
+            "SELECT * FROM comments WHERE post_id=? ORDER BY id ASC",
+            (post_id,)
         ).fetchall()
     return jsonify([dict(r) for r in rows])
 
