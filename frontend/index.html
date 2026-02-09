@@ -1,207 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BuildSmart</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Build Smart</title>
+  <link rel="stylesheet" href="./styles.css"/>
 </head>
 <body>
-
-  <!-- Top Nav -->
-  <header class="topbar">
+<header>
+  <div class="nav">
     <div class="brand">
-      <img src="img/logo.png" alt="BuildSmart Logo"
-           onerror="this.style.display='none';document.querySelector('.brand span').style.display='inline'">
-      <span style="display:none">BuildSmart</span>
+      <!-- СЮДА ВСТАВИТЬ ТВОЙ СИМВОЛ: frontend/assets/SYMBOL_PLACEHOLDER.svg -->
+      <img src="./assets/SYMBOL_PLACEHOLDER.svg" alt="Build Smart"/>
+      <span>Build Smart</span>
     </div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#ideen">Neue Ideen</a>
-      <a href="#reparieren">Reparieren</a>
-      <a href="#about">Über uns</a>
+    <nav class="menu">
+      <a href="./index.html">Home</a>
+      <a href="./ueber-uns.html">Über uns</a>
+      <a href="./leistungen.html">Leistungen</a>
     </nav>
-  </header>
-
-  <!-- Hero -->
-  <section id="home" class="hero reveal">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        Entdecken · Vorschlagen · Verändern
-      </h1>
-
-      <p class="hero-sub">
-        Eine klare Plattform für nachhaltige Infrastruktur in deiner Stadt.
-      </p>
-
-      <div class="hero-actions">
-        <a class="btn btn-accent" href="#ideen">Idee vorschlagen</a>
-        <a class="btn btn-outline" href="#reparieren">Schaden melden</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Ideen -->
-  <section id="ideen" class="grid two reveal">
-    <div class="section-head">
-      <h2>Neue Ideen</h2>
-      <p>Skizzen, Vorschläge, kleine Projekte. Kurz, klar, nachvollziehbar.</p>
-    </div>
-
-    <div class="cards" id="ideen-list">
-      <article class="card">
-        <img src="img/alley.jpg" alt="Grüne Allee am Fluss" class="card-thumb">
-        <h3>Grüne Allee am Fluss</h3>
-        <p>Beschattung, Fuß- und Radweg, Regenwasserrinne.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/solar.jpg" alt="Solar auf Bushaltestellen" class="card-thumb">
-        <h3>Solar auf Bushaltestellen</h3>
-        <p>Energie für Beleuchtung und Anzeige.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/idee1.jpg" class="card-thumb" alt="Urbaner Gartenplatz">
-        <h3>Urbaner Gartenplatz</h3>
-        <p>Begrünte Sitzflächen für Innenhöfe und Wohnviertel.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/idee2.jpg" class="card-thumb" alt="Sichere Fahrradboxen">
-        <h3>Sichere Fahrradboxen</h3>
-        <p>Abschließbare, wetterfeste Boxen an Verkehrsknotenpunkten.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/idee3.jpg" class="card-thumb" alt="Mini-Solarlampen">
-        <h3>Mini-Solarlampen</h3>
-        <p>Kleine LED-Lampen entlang Gehwegen für bessere Orientierung.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/idee4.jpg" class="card-thumb" alt="Grüne Dächer">
-        <h3>Grüne Dächer</h3>
-        <p>Begrünte Dächer auf Bushaltestellen für Kühlung und Ästhetik.</p>
-      </article>
-      
-    </div>
-
-    <div class="btn-section">
-      <button class="btn" data-modal="ideen">Idee hinzufügen</button>
-    </div>
-  </section>
-
-  <!-- Reparieren -->
-  <section id="reparieren" class="grid two reveal">
-    <div class="section-head">
-      <h2>Reparieren</h2>
-      <p>Schäden mit Ort &amp; Datum melden. Kurz beschreiben, Foto optional.</p>
-    </div>
-
-    <div class="cards" id="reparieren-list">
-      <article class="card">
-        <img src="img/schlaglöcher.jpg" alt="Schlaglöcher – Hauptstraße" class="card-thumb">
-        <h3>Schlaglöcher – Hauptstraße</h3>
-        <p>Koordinaten vorhanden. Priorität: hoch.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/schaukel.jpg" alt="Spielplatz – defekte Schaukel" class="card-thumb">
-        <h3>Spielplatz – defekte Schaukel</h3>
-        <p>Rosengartenweg, 10.05.2025.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/rep1.jpg" class="card-thumb" alt="Kaputter Bürgersteig">
-        <h3>Kaputter Bürgersteig</h3>
-        <p>Mehrere lose Steine — Stolpergefahr, dringend notwendig.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/rep2.jpg" class="card-thumb" alt="Graffiti an Hauswand">
-        <h3>Graffiti an Hauswand</h3>
-        <p>Ungenehmigte Schmiererei, Reinigung erforderlich.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/rep3.jpg" class="card-thumb" alt="Defekte Ampel">
-        <h3>Defekte Ampel</h3>
-        <p>Fußgängerampel schaltet unregelmäßig, hohes Risiko.</p>
-      </article>
-
-      <article class="card">
-        <img src="img/rep4.jpg" class="card-thumb" alt="Überfluteter Weg">
-        <h3>Überfluteter Weg</h3>
-        <p>Starke Pfützenbildung nach Regen — Drainage unzureichend.</p>
-      </article>
-
-    </div>
-
-    <div class="btn-section">
-      <button class="btn btn-outline" data-modal="reparieren">Schaden melden</button>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="about reveal">
-    <h2>Über uns</h2>
-
-    <p>
-      BuildSmart ist eine moderne Plattform zur Sammlung, Strukturierung
-      und Bewertung von Ideen und Mängelmeldungen in städtischen Bereichen.
-      Unser Ziel ist es, die Kommunikation zwischen Bürgerinnen, Bürgern
-      und kommunalen Einrichtungen zu vereinfachen und Entscheidungen
-      transparenter zu machen.
-    </p>
-
-    <p>
-      Die Plattform bietet zwei Bereiche: <strong>Neue Ideen</strong>, in denen
-      Vorschläge für Verbesserungen eingereicht werden können, und
-      <strong>Reparieren</strong>, wo Schäden mit Ort, Datum und optionalem Foto
-      gemeldet werden. Jede Meldung wird klar dargestellt, damit
-      Verwaltungsstellen sie schneller auswerten und priorisieren können.
-    </p>
-
-    <p>
-      BuildSmart unterstützt nachhaltige Stadtentwicklung durch klare
-      Datenerfassung, visuelle Übersicht und intuitive Bedienung.
-      Unser Ansatz verbindet Urbanistik, Technologie und Bürgerbeteiligung
-      in einem einzigen, übersichtlichen System.
-    </p>
-
-    <p>
-      Unser Anspruch ist es, eine Stadt zu gestalten, in der Ideen nicht
-      verloren gehen und Probleme nicht übersehen werden – sondern klar,
-      strukturiert und nachvollziehbar sichtbar sind.
-    </p>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>© BuildSmart</p>
-  </footer>
-
-  <!-- Modal -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-box">
-      <h3 id="modal-title">Beitrag hochladen</h3>
-      <form class="modal-form">
-        <label>Titel <input required placeholder="Kurzer Titel"></label>
-        <label>Ort <input required placeholder="Straße / Koordinaten"></label>
-        <label>Datum <input type="date" required></label>
-        <label>Beschreibung <textarea rows="3" placeholder="Kurz und präzise"></textarea></label>
-        <label>Datei (optional) <input type="file" accept="image/*"></label>
-        <div class="modal-actions">
-          <button class="btn btn-outline" type="button" onclick="closeModal()">Abbrechen</button>
-          <button class="btn btn-accent" type="submit">Senden</button>
-        </div>
-      </form>
-    </div>
   </div>
+</header>
 
-  <script src="scripts.js"></script>
+<main class="main">
+  <section class="hero">
+    <div class="heroCard">
+      <h1>Willkommen bei Build Smart</h1>
+      <p><b>Wir entdecken, vorschlagen und verändern.</b></p>
+      <a class="btn" href="./los-gehts.html">Los geht’s!</a>
+
+      <h2>BuildSmart</h2>
+      <p>Bringe deine Stadt auf das nächste Level — fotografiere Probleme, teile Ideen und gestalte aktiv deine Umgebung mit.
+        Mit BuildSmart wird jeder Bewohner zum Mitgestalter eines modernen, sicheren und lebenswerten Stadtbildes.</p>
+    </div>
+
+    <div class="card">
+      <!-- СЮДА ВСТАВИТЬ ГЛАВНОЕ ФОТО -->
+      <img src="./assets/hero-placeholder.jpg" alt="Hero" style="width:100%; border-radius:14px; border:1px solid var(--border)"/>
+      <p class="small">Platzhalter-Bild. Du ersetzt es später.</p>
+    </div>
+  </section>
+</main>
+
+<footer>© 2025 - 2026 Build Smart</footer>
 </body>
 </html>
