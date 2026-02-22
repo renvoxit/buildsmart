@@ -627,3 +627,21 @@ footer{
   }
 
 }
+.pricing{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap:16px;
+  margin-top:14px;
+}
+.priceCard{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:14px;
+  padding:14px 14px 10px;
+}
+.priceCard h4{ margin:0 0 8px; }
+.priceCard ul{ margin:0; padding-left:18px; line-height:1.55; }
+.muted{ color:#666; font-size:0.95rem; margin-top:8px; }
+@media (max-width: 900px){
+  .pricing{ grid-template-columns: 1fr; }
+}
