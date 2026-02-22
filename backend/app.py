@@ -199,6 +199,21 @@ def uploads(filename: str):
     return send_from_directory(UPLOAD_DIR, filename)
 
 
+@app.route("/api/posts/<int:post_id>", methods=["DELETE"])
+def delete_post(post_id):
+    with db() as con:
+        con.execute("DELETE FROM comments WHERE post_id=?", (post_id,))
+        con.execute("DELETE FROM posts WHERE id=?", (post_id,))
+    return jsonify({"ok": True})
+
+
+@app.route("/api/comments/<int:comment_id>", methods=["DELETE"])
+def delete_comment(comment_id):
+    with db() as con:
+        con.execute("DELETE FROM comments WHERE id=?", (comment_id,))
+    return jsonify({"ok": True})
+
+
 if __name__ == "__main__":
     init_db()
     app.run(host="0.0.0.0", port=5000, debug=True)

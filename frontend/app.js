@@ -29,6 +29,33 @@ function escapeHtml(s){
 }
 
 document.addEventListener("click", (e) => {
+  const dpost = e.target.closest("[data-delete-post]");
+if (dpost){
+  const id = dpost.getAttribute("data-delete-post");
+  if (!confirm("Post wirklich löschen?")) return;
+
+  // МГНОВЕННО убираем с экрана
+  dpost.closest(".postCard")?.remove();
+
+  // сервер пусть удаляет в фоне
+  fetch(`${API}/api/posts/${id}`, { method:"DELETE" })
+    .catch(err => console.error(err));
+
+  return;
+}
+const dcom = e.target.closest("[data-delete-comment]");
+if (dcom){
+  const id = dcom.getAttribute("data-delete-comment");
+  if (!confirm("Kommentar löschen?")) return;
+
+  // мгновенно убираем комментарий
+  dcom.closest(".commentItem")?.remove();
+
+  fetch(`${API}/api/comments/${id}`, { method:"DELETE" })
+    .catch(err => console.error(err));
+
+  return;
+}
   const btn = e.target.closest("[data-close]");
   if (btn) closeModal(btn.getAttribute("data-close"));
   if (e.target.classList.contains("modalBack")) e.target.style.display = "none";
@@ -60,7 +87,6 @@ function postItemHTML(p){
   ? `${API}/uploads/${encodeURIComponent(p.image_path)}`
   : "./assets/placeholder-thumb.jpg";
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
-
   return `
     <div class="postCard">
       <div class="postTop">
@@ -82,8 +108,9 @@ function postItemHTML(p){
       </div>
 
       <div class="postActions">
-        <button class="commentToggle" data-toggle-comments="${p.id}">Kommentare</button>
-      </div>
+  <button class="commentToggle" data-toggle-comments="${p.id}">Kommentare</button>
+  <button class="voteBtn" data-delete-post="${p.id}">🗑</button>
+</div>
 
       <div class="commentsBox" id="comments-${p.id}" style="display:none;">
         <div class="commentsList" id="commentsList-${p.id}"></div>
@@ -189,6 +216,7 @@ async function loadComments(postId){
   if (!list) return;
 
   const items = await fetchJSON(`${API}/api/posts/${postId}/comments`);
+
   if (!items.length){
     list.innerHTML = `<div class="emptyState">Noch keine Kommentare.</div>`;
     return;
@@ -196,13 +224,16 @@ async function loadComments(postId){
 
   list.innerHTML = items.map(c => {
     const file = c.file_path
-? `<a class="fileLink" href="${API}/uploads/${encodeURIComponent(c.file_path)}" target="_blank">📎 Datei</a>`      : "";
+      ? `<a class="fileLink" href="${API}/uploads/${encodeURIComponent(c.file_path)}" target="_blank">📎 Datei</a>`
+      : "";
+
     return `
       <div class="commentItem">
         <div class="commentText">${escapeHtml(c.text)}</div>
         <div class="commentMeta">
           <span>${escapeHtml(c.created_at)}</span>
           ${file}
+          <button class="voteBtn" data-delete-comment="${c.id}">🗑</button>
         </div>
       </div>
     `;
