@@ -1,10 +1,15 @@
-const API = "http://127.0.0.1:5000";
+const API = location.origin;
 
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, opts);
-  const data = await r.json();
-  if (!r.ok) throw new Error(data.error || "Request failed");
-  return data;
+async function fetchJSON(url, opts = {}) {
+  try {
+    const r = await fetch(url, opts);
+    if (!r.ok) throw new Error(await r.text());
+    return await r.json();
+  } catch (e) {
+    alert("Backend error");
+    console.error(e);
+    throw e;
+  }
 }
 
 function openModal(id){
@@ -51,7 +56,9 @@ if (shareOpenA){
 }
 
 function postItemHTML(p){
-  const img = p.image_path ? `${API}/uploads/${p.image_path}` : "./assets/placeholder-thumb.jpg";
+  const img = p.image_path
+  ? `${API}/uploads/${encodeURIComponent(p.image_path)}`
+  : "./assets/placeholder-thumb.jpg";
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
 
   return `
@@ -189,8 +196,7 @@ async function loadComments(postId){
 
   list.innerHTML = items.map(c => {
     const file = c.file_path
-      ? `<a class="fileLink" href="${API}/uploads/${c.file_path}" target="_blank">📎 Datei</a>`
-      : "";
+? `<a class="fileLink" href="${API}/uploads/${encodeURIComponent(c.file_path)}" target="_blank">📎 Datei</a>`      : "";
     return `
       <div class="commentItem">
         <div class="commentText">${escapeHtml(c.text)}</div>
