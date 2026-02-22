@@ -645,3 +645,18 @@ footer{
 @media (max-width: 900px){
   .pricing{ grid-template-columns: 1fr; }
 }
+
+.shots{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+  margin-top:10px;
+}
+.shots img{
+  width:100%;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.12);
+}
+@media (max-width: 900px){
+  .shots{ grid-template-columns: 1fr; }
+}
