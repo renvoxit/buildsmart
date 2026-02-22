@@ -4,6 +4,9 @@ from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+from time import time
+
+VOTE_COOLDOWN = {}
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +25,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @app.route("/")
-def hom4e():
+def home():
     return "Hello, Build Smart!"
 
 
@@ -33,7 +36,7 @@ def favicon():
 
 
 def db():
-    con = sqlite3.connect(DB_PATH)
+    con = sqlite3.connect(DB_PATH, check_same_thread=False)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON;")
     return con
@@ -58,9 +61,13 @@ def ext_ok(filename: str, allowed: set[str]) -> bool:
 
 
 def save_upload(file, allowed_ext: set[str]) -> str:
+    if file.content_length and file.content_length > MAX_CONTENT_LENGTH:
+        raise ValueError("File too large")
+
     filename = secure_filename(file.filename or "")
     if not filename or not ext_ok(filename, allowed_ext):
         raise ValueError("Invalid file type")
+
     stamp = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")
     ext = filename.rsplit(".", 1)[1].lower()
     stored = f"{stamp}.{ext}"
@@ -121,14 +128,25 @@ def create_post():
 
 @app.post("/api/posts/<int:post_id>/vote")
 def vote(post_id: int):
+    ip = request.remote_addr
+    now = time()
+
+    last = VOTE_COOLDOWN.get(ip, 0)
+    if now - last < 3:
+        return jsonify({"error": "Too fast"}), 429
+
+    VOTE_COOLDOWN[ip] = now
+
     with db() as con:
         row = con.execute("SELECT id FROM posts WHERE id=?",
                           (post_id,)).fetchone()
         if not row:
             return jsonify({"error": "Not found"}), 404
+
         con.execute("UPDATE posts SET votes = votes + 1 WHERE id=?", (post_id,))
         row2 = con.execute(
             "SELECT votes FROM posts WHERE id=?", (post_id,)).fetchone()
+
     return jsonify({"post_id": post_id, "votes": row2["votes"]})
 
 
