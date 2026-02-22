@@ -96,8 +96,9 @@ header{
 }
 
 /* HERO на главной */
-.hero{
-  height:520px;
+.hero {
+  min-height: 520px;
+  height: auto;
   position:relative;
   overflow:hidden;
 }
@@ -583,4 +584,29 @@ footer{
 .emptyState{
   color:#777;
   padding:10px 2px;
+}
+
+@media (max-width: 768px) {
+
+  .container {
+    padding: 16px;
+  }
+
+  .hero {
+    padding: 24px 16px;
+  }
+
+  .postCard {
+    margin: 12px 0;
+  }
+
+  .postTop {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .postVotes {
+    align-self: flex-start;
+  }
+
 }
