@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from time import time
+from flask import send_from_directory
 
 VOTE_COOLDOWN = {}
 
@@ -17,7 +18,7 @@ ALLOWED_IMAGE_EXT = {"png", "jpg", "jpeg", "webp"}
 ALLOWED_FILE_EXT = {"png", "jpg", "jpeg", "webp", "pdf", "txt"}
 MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10MB
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../frontend", static_url_path="")
 app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 CORS(app)
 
@@ -26,7 +27,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @app.route("/")
 def home():
-    return "Hello, Build Smart!"
+    return app.send_static_file("index.html")
 
 
 @app.get("/favicon.ico")

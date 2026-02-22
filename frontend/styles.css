@@ -1,3 +1,6 @@
+html, body {
+  overflow-x: hidden;
+}
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
 
 :root{
@@ -97,17 +100,19 @@ header{
 
 /* HERO на главной */
 .hero {
+  position: relative;
+  width: 100%;
   min-height: 520px;
-  height: auto;
-  position:relative;
-  overflow:hidden;
+  overflow: hidden;
 }
+
 .hero img{
   width:100%;
   height:100%;
   object-fit:cover;
-  filter: contrast(.95) brightness(.82) saturate(.95);
+  filter: contrast(.95) brightness(.45) saturate(.95);
 }
+
 .heroOverlay{
   position:absolute;
   inset:0;
@@ -233,10 +238,10 @@ header{
   margin:0 auto;
 }
 .circleIcon img{
-  width:160px;
-  height:160px;
+  width:250px;
+  height:250px;
   object-fit:contain;
-  filter: invert(1); /* чтобы белым смотрелось */
+  filter: brightness(0) invert(1);
 }
 
 /* Leistungen блок (розовый фон + фото справа) */
@@ -590,10 +595,6 @@ footer{
 
   .container {
     padding: 16px;
-  }
-
-  .hero {
-    padding: 24px 16px;
   }
 
   .postCard {
