@@ -668,3 +668,120 @@ h2, h3, h4 {
 .bandInner img {
   margin-top: 30px;
 }
+
+/* ===== MOBILE FIXES ===== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* HERO: image must cover + overlay stays on image */
+.hero {
+  position: relative;
+  width: 100%;
+}
+
+.hero > img {
+  display: block;
+  width: 100%;
+  height: 70vh;          /* hero height on phone */
+  object-fit: cover;     /* crop instead of shrinking */
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* center vertically */
+  align-items: center;      /* center horizontally */
+  text-align: center;
+  padding: 18px;
+}
+
+/* make hero text readable on phone */
+.heroOverlay h1 {
+  max-width: 95%;
+  line-height: 1.05;
+}
+
+.heroOverlay p {
+  max-width: 92%;
+}
+
+/* nav/header: center and wrap nicely */
+.navwrap, .topbar {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logo {
+  justify-content: center;
+}
+
+/* ===== Main content mobile layout ===== */
+@media (max-width: 900px) {
+
+  /* stop the right-shift: make container fit screen */
+  .band, .bandInner {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* stack text + image (no weird side-by-side on phone) */
+  .bandInner {
+    display: block;
+  }
+
+  /* center everything after "So funktioniert es..." */
+  .bandInner > div {
+    padding-left: 14px;
+    padding-right: 14px;
+    text-align: center;
+  }
+
+  /* BUT: keep the first "BuildSmart" heading as-is (not centered) */
+  .bandInner > div > h2:first-of-type {
+    text-align: left;
+  }
+
+  /* prevent long lines from poking out */
+  .bandInner p, .bandInner li {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* lists: keep readable while visually centered */
+  .bandInner ul {
+    display: inline-block;
+    text-align: left;
+    padding-left: 18px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* screenshots: stack */
+  .shots {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* pricing cards: stack */
+  .pricing {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* right-side sketch image: full width on phone */
+  .bandInner img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin-top: 18px;
+  }
+}
