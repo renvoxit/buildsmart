@@ -664,3 +664,21 @@ h2, h3, h4{
   .pricing{ gap:12px; }
   .priceCard{ width:100%; }
 }
+/* ===== CENTER TEXT COLUMN IN BAND ===== */
+
+.bandInner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* центрируем ЛЕВУЮ колонку (где абзацы) */
+.bandInner > div:first-child{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 520px;   /* чтобы текст не растягивался как простыня */
+}
+
+/* оставляем картинку справа */
+.bandInner img{
+  justify-self: end;
+}
