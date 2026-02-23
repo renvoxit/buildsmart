@@ -863,3 +863,25 @@ ul {
 }
 
 }
+/* MOBILE HERO FULL WIDTH FIX */
+@media (max-width: 768px) {
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    display: block;
+  }
+
+}
