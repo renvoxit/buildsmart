@@ -885,3 +885,111 @@ ul {
   }
 
 }
+
+/* ===== SAFE FIX: cards + centering (does NOT touch hero/fonts) ===== */
+
+/* 1) Белые карточки -> прозрачные (везде) */
+.priceCard{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(0,0,0,.18) !important;
+}
+
+/* 2) Beispiele + Finanzierung по центру (везде) */
+.band h3{
+  text-align: center;
+}
+
+.shots,
+.pricing{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* чтобы внутри не уезжало вправо */
+.shots img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3) Мобилка: убрать узкий столбик из-за больших боковых паддингов */
+@media (max-width: 768px){
+  .bandInner{
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* если pricing/shots были grid/flex в 2 колонки — на мобилке в одну */
+  .shots{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .pricing{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  .pricing .priceCard{
+    width: 100% !important;
+    max-width: 520px !important;
+  }
+}
+
+/* ===== SAFE FIX: cards + centering (does NOT touch hero/fonts) ===== */
+
+/* 1) Белые карточки -> прозрачные (везде) */
+.priceCard{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(0,0,0,.18) !important;
+}
+
+/* 2) Beispiele + Finanzierung по центру (везде) */
+.band h3{
+  text-align: center;
+}
+
+.shots,
+.pricing{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* чтобы внутри не уезжало вправо */
+.shots img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3) Мобилка: убрать узкий столбик из-за больших боковых паддингов */
+@media (max-width: 768px){
+  .bandInner{
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* если pricing/shots были grid/flex в 2 колонки — на мобилке в одну */
+  .shots{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .pricing{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  .pricing .priceCard{
+    width: 100% !important;
+    max-width: 520px !important;
+  }
+}
