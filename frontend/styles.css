@@ -154,35 +154,21 @@ header{
 .band{
   background:var(--accent);
   padding:44px 0;
+}
+
+/* Центрируем текстовый блок относительно страницы, картинка справа */
 .bandInner{
-  /* центрируем весь блок */
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width:1100px;
+  margin:0 auto;
+  padding:60px 16px;
 
-  /* убираем конские боковые отступы, из-за них всё выглядит “слева” */
-  padding: 60px 16px;
-
-  display: grid;
-
-  /* делаем нормальные колонки: текст ограничен, картинка отдельной колонкой */
+  display:grid;
   grid-template-columns: minmax(0, 520px) minmax(0, 420px);
-  gap: 40px;
-
-  /* КЛЮЧ: центрируем сетку по ширине */
-  justify-content: center;
-  align-items: flex-start;
+  gap:40px;
+  justify-content:center;
+  align-items:flex-start;
 }
 
-/* текст остаётся левым внутри своей колонки (читаемо), но колонка теперь по центру страницы */
-.bandInner :is(h2, p, ul, li){
-  text-align: left;
-}
-
-/* картинку держим справа */
-.bandInner img{
-  justify-self: end;
-}
-}
 .bandInner h2{
   margin:0 0 16px;
   font-size:44px;
@@ -202,7 +188,9 @@ header{
   object-fit:cover;
   border-radius:18px;
   margin-top: 30px;
+  justify-self: end;
 }
+
 
 .band h3{
   font-size:28px;
@@ -683,22 +671,4 @@ h2, h3, h4{
 
   .pricing{ gap:12px; }
   .priceCard{ width:100%; }
-}
-/* ===== CENTER TEXT COLUMN IN BAND ===== */
-
-.bandInner{
-  max-width:1100px;
-  margin:0 auto;
-}
-
-/* центрируем ЛЕВУЮ колонку (где абзацы) */
-.bandInner > div:first-child{
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 520px;   /* чтобы текст не растягивался как простыня */
-}
-
-/* оставляем картинку справа */
-.bandInner img{
-  justify-self: end;
 }
