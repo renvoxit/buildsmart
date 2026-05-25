@@ -300,6 +300,67 @@ header{
   border:10px solid rgba(255,255,255,.25);
 }
 
+.servicesPage{
+  max-width:1100px;
+  margin:0 auto;
+  padding:34px 16px 58px;
+}
+.serviceGrid{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:14px;
+}
+.serviceItem{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:18px;
+  background:#fff;
+}
+.serviceItem h2,
+.financeSection h2,
+.financePlans h3{
+  margin:0 0 8px;
+}
+.serviceItem h2{
+  color:var(--accent2);
+  font-size:24px;
+}
+.serviceItem p,
+.financeSection p{
+  margin:0;
+  color:#555;
+  font-size:17px;
+  line-height:1.5;
+}
+.financeSection{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:24px;
+  align-items:start;
+  border-top:1px solid var(--border);
+  padding-top:28px;
+}
+.financeSection h2{
+  color:var(--accent2);
+  font-size:34px;
+}
+.financePlans{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:12px;
+}
+.financePlans article{
+  background:var(--soft);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:14px;
+}
+.financePlans h3{
+  font-size:20px;
+  color:#222;
+}
+
 /* Los geht’s верх (иконка круг + заголовок) */
 .centerBlock{
   text-align:center;
@@ -557,6 +618,7 @@ footer{
 }
 
 .postActions{ margin-top:10px; display:flex; }
+.postActions{ gap:8px; flex-wrap:wrap; }
 .commentToggle{
   border:1px solid #d5c9c7;
   background:#fff;
@@ -586,6 +648,8 @@ footer{
   font-size:12px;
 }
 .fileLink{ color:#6b4a46; text-decoration:underline; }
+.inlineLink{ color:#6b4a46; text-decoration:underline; overflow-wrap:anywhere; }
+.dangerBtn{ color:#8d2920; border-color:#e2bbb6; }
 
 .commentForm{ margin-top:10px; display:grid; gap:10px; }
 .commentRow{ display:flex; gap:10px; align-items:center; }
@@ -646,6 +710,10 @@ h2, h3, h4{
   .bandInner{ grid-template-columns:1fr; padding:60px 16px; }
   .twoCols{ grid-template-columns:1fr; }
   .leistungenInner{ grid-template-columns:1fr; }
+  .leistungenInner h1{ font-size:44px; }
+  .leistungenInner p{ font-size:20px; }
+  .serviceGrid{ grid-template-columns:1fr 1fr; }
+  .financeSection{ grid-template-columns:1fr; }
   .twocol{ grid-template-columns:1fr; }
   .row{ grid-template-columns:1fr; }
   .heroOverlay h1{ font-size:44px; }
@@ -654,6 +722,7 @@ h2, h3, h4{
 
   .shots{ grid-template-columns: 1fr; }
   .pricing{ grid-template-columns: 1fr; }
+  .financePlans{ grid-template-columns:1fr; }
 }
 
 /* Mobile hero: keep overlay centered + image cropped (no layout nukes) */
@@ -664,6 +733,15 @@ h2, h3, h4{
   .postVotes{ align-self:flex-start; }
 
   .hero img{ height:70vh; }
+  .leistungenBand{ margin-top:0; padding:28px 0; }
+  .leistungenInner{ gap:18px; }
+  .leistungenInner h1{ font-size:36px; }
+  .leistungenInner p{ font-size:17px; line-height:1.45; }
+  .leistungenInner img{ height:220px; border-width:6px; }
+  .servicesPage{ padding:24px 14px 42px; }
+  .serviceGrid{ grid-template-columns:1fr; gap:10px; }
+  .serviceItem{ padding:14px; }
+  .financeSection h2{ font-size:30px; }
 
   .navwrap, .topbar{ padding-left:12px; padding-right:12px; }
   .nav{ flex-wrap:wrap; justify-content:center; gap:10px; }

@@ -1,12 +1,29 @@
 const API = location.origin;
+const CLIENT_TOKEN_KEY = "buildsmart_client_token";
+
+function getClientToken(){
+  let token = localStorage.getItem(CLIENT_TOKEN_KEY);
+  if (!token){
+    token = window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+    localStorage.setItem(CLIENT_TOKEN_KEY, token);
+  }
+  return token;
+}
 
 async function fetchJSON(url, opts = {}) {
   try {
-    const r = await fetch(url, opts);
-    if (!r.ok) throw new Error(await r.text());
+    const headers = new Headers(opts.headers || {});
+    headers.set("X-Client-Token", getClientToken());
+    const r = await fetch(url, { ...opts, headers });
+    if (!r.ok) {
+      let message = await r.text();
+      try {
+        message = JSON.parse(message).error || message;
+      } catch {}
+      throw new Error(message);
+    }
     return await r.json();
   } catch (e) {
-    alert("Backend error");
     console.error(e);
     throw e;
   }
@@ -28,18 +45,27 @@ function escapeHtml(s){
     .replaceAll("'","&#039;");
 }
 
-document.addEventListener("click", (e) => {
+function formatText(s){
+  const escaped = escapeHtml(s);
+  const linked = escaped.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    '<a class="inlineLink" href="$1" target="_blank" rel="noopener">$1</a>'
+  );
+  return linked.replace(/\n/g, "<br>");
+}
+
+document.addEventListener("click", async (e) => {
   const dpost = e.target.closest("[data-delete-post]");
 if (dpost){
   const id = dpost.getAttribute("data-delete-post");
   if (!confirm("Post wirklich löschen?")) return;
 
-  // МГНОВЕННО убираем с экрана
-  dpost.closest(".postCard")?.remove();
-
-  // сервер пусть удаляет в фоне
-  fetch(`${API}/api/posts/${id}`, { method:"DELETE" })
-    .catch(err => console.error(err));
+  try{
+    await fetchJSON(`${API}/api/posts/${id}`, { method:"DELETE" });
+    dpost.closest(".postCard")?.remove();
+  }catch(err){
+    alert("Du kannst nur eigene Posts löschen.");
+  }
 
   return;
 }
@@ -48,11 +74,12 @@ if (dcom){
   const id = dcom.getAttribute("data-delete-comment");
   if (!confirm("Kommentar löschen?")) return;
 
-  // мгновенно убираем комментарий
-  dcom.closest(".commentItem")?.remove();
-
-  fetch(`${API}/api/comments/${id}`, { method:"DELETE" })
-    .catch(err => console.error(err));
+  try{
+    await fetchJSON(`${API}/api/comments/${id}`, { method:"DELETE" });
+    dcom.closest(".commentItem")?.remove();
+  }catch(err){
+    alert("Du kannst nur eigene Kommentare löschen.");
+  }
 
   return;
 }
@@ -87,6 +114,9 @@ function postItemHTML(p){
   ? `${API}/uploads/${encodeURIComponent(p.image_path)}`
   : "./assets/placeholder-thumb.jpg";
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
+  const deleteButton = p.can_delete
+    ? `<button class="voteBtn dangerBtn" data-delete-post="${p.id}" title="Löschen">Delete</button>`
+    : "";
   return `
     <div class="postCard">
       <div class="postTop">
@@ -101,7 +131,7 @@ function postItemHTML(p){
       </div>
 
       <div class="postBody">
-        <div class="postText">${escapeHtml(p.description)}</div>
+        <div class="postText">${formatText(p.description)}</div>
         <div class="postMedia">
           <img class="postImg" src="${img}" alt="image"/>
         </div>
@@ -109,7 +139,7 @@ function postItemHTML(p){
 
       <div class="postActions">
   <button class="commentToggle" data-toggle-comments="${p.id}">Kommentare</button>
-  <button class="voteBtn" data-delete-post="${p.id}">🗑</button>
+  ${deleteButton}
 </div>
 
       <div class="commentsBox" id="comments-${p.id}" style="display:none;">
@@ -175,6 +205,9 @@ document.addEventListener("click", async (e) => {
       await fetchJSON(`${API}/api/posts/${id}/vote`, { method:"POST" });
       await loadLists();
     }catch(err){
+      alert(err.message === "Already voted"
+        ? "Du hast diesen Beitrag bereits bewertet."
+        : "Bitte warte kurz, bevor du erneut bewertest.");
       console.error(err);
     }
   }
@@ -226,14 +259,17 @@ async function loadComments(postId){
     const file = c.file_path
       ? `<a class="fileLink" href="${API}/uploads/${encodeURIComponent(c.file_path)}" target="_blank">📎 Datei</a>`
       : "";
+    const deleteButton = c.can_delete
+      ? `<button class="voteBtn dangerBtn" data-delete-comment="${c.id}">Delete</button>`
+      : "";
 
     return `
       <div class="commentItem">
-        <div class="commentText">${escapeHtml(c.text)}</div>
+        <div class="commentText">${formatText(c.text)}</div>
         <div class="commentMeta">
           <span>${escapeHtml(c.created_at)}</span>
           ${file}
-          <button class="voteBtn" data-delete-comment="${c.id}">🗑</button>
+          ${deleteButton}
         </div>
       </div>
     `;

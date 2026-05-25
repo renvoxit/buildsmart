@@ -48,10 +48,46 @@ def init_db():
         schema_path = os.path.join(BASE_DIR, "schema.sql")
         with open(schema_path, "r", encoding="utf-8") as f:
             con.executescript(f.read())
+        ensure_column(con, "posts", "author_token", "TEXT")
+        ensure_column(con, "comments", "author_token", "TEXT")
+        con.execute("""
+            CREATE TABLE IF NOT EXISTS post_votes (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              post_id INTEGER NOT NULL,
+              voter_token TEXT NOT NULL,
+              created_at TEXT NOT NULL,
+              FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
+              UNIQUE(post_id, voter_token)
+            )
+        """)
 
 
 def now_iso():
     return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+
+
+def ensure_column(con, table: str, column: str, definition: str):
+    columns = [row["name"] for row in con.execute(f"PRAGMA table_info({table})")]
+    if column not in columns:
+        con.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+
+
+def client_token() -> str:
+    return request.headers.get("X-Client-Token", "").strip()[:128]
+
+
+def public_post(row):
+    item = dict(row)
+    item["can_delete"] = bool(client_token() and item.get("author_token") == client_token())
+    item.pop("author_token", None)
+    return item
+
+
+def public_comment(row):
+    item = dict(row)
+    item["can_delete"] = bool(client_token() and item.get("author_token") == client_token())
+    item.pop("author_token", None)
+    return item
 
 
 def ext_ok(filename: str, allowed: set[str]) -> bool:
@@ -94,7 +130,7 @@ def list_posts():
         else:
             rows = con.execute(
                 "SELECT * FROM posts ORDER BY id DESC").fetchall()
-    return jsonify([dict(r) for r in rows])
+    return jsonify([public_post(r) for r in rows])
 
 
 @app.post("/api/posts")
@@ -102,6 +138,7 @@ def create_post():
     category = request.form.get("category", "").strip()
     address = request.form.get("address", "").strip()
     desc = request.form.get("description", "").strip()
+    author = client_token()
 
     if category not in ("vorschlag", "anmerkung"):
         return jsonify({"error": "Invalid category"}), 400
@@ -117,32 +154,47 @@ def create_post():
 
     with db() as con:
         cur = con.execute(
-            "INSERT INTO posts(category,address,description,image_path,created_at) VALUES(?,?,?,?,?)",
-            (category, address, desc, image_name, now_iso())
+            "INSERT INTO posts(category,address,description,image_path,created_at,author_token) VALUES(?,?,?,?,?,?)",
+            (category, address, desc, image_name, now_iso(), author)
         )
         post_id = cur.lastrowid
         row = con.execute("SELECT * FROM posts WHERE id=?",
                           (post_id,)).fetchone()
 
-    return jsonify(dict(row)), 201
+    return jsonify(public_post(row)), 201
 
 
 @app.post("/api/posts/<int:post_id>/vote")
 def vote(post_id: int):
-    ip = request.remote_addr
     now = time()
-
-    last = VOTE_COOLDOWN.get(ip, 0)
-    if now - last < 3:
-        return jsonify({"error": "Too fast"}), 429
-
-    VOTE_COOLDOWN[ip] = now
+    voter = client_token() or request.remote_addr or "anonymous"
 
     with db() as con:
         row = con.execute("SELECT id FROM posts WHERE id=?",
                           (post_id,)).fetchone()
         if not row:
             return jsonify({"error": "Not found"}), 404
+
+        existing_vote = con.execute(
+            "SELECT id FROM post_votes WHERE post_id=? AND voter_token=?",
+            (post_id, voter)
+        ).fetchone()
+        if existing_vote:
+            return jsonify({"error": "Already voted"}), 409
+
+        last = VOTE_COOLDOWN.get(voter, 0)
+        if now - last < 3:
+            return jsonify({"error": "Too fast"}), 429
+
+        VOTE_COOLDOWN[voter] = now
+
+        try:
+            con.execute(
+                "INSERT INTO post_votes(post_id,voter_token,created_at) VALUES(?,?,?)",
+                (post_id, voter, now_iso())
+            )
+        except sqlite3.IntegrityError:
+            return jsonify({"error": "Already voted"}), 409
 
         con.execute("UPDATE posts SET votes = votes + 1 WHERE id=?", (post_id,))
         row2 = con.execute(
@@ -162,12 +214,13 @@ def list_comments(post_id: int):
             "SELECT * FROM comments WHERE post_id=? ORDER BY id ASC",
             (post_id,)
         ).fetchall()
-    return jsonify([dict(r) for r in rows])
+    return jsonify([public_comment(r) for r in rows])
 
 
 @app.post("/api/posts/<int:post_id>/comments")
 def add_comment(post_id: int):
     text = request.form.get("text", "").strip()
+    author = client_token()
     if len(text) < 1:
         return jsonify({"error": "Empty comment"}), 400
 
@@ -184,14 +237,14 @@ def add_comment(post_id: int):
         if not exists:
             return jsonify({"error": "Not found"}), 404
         cur = con.execute(
-            "INSERT INTO comments(post_id,text,file_path,created_at) VALUES(?,?,?,?)",
-            (post_id, text, file_name, now_iso())
+            "INSERT INTO comments(post_id,text,file_path,created_at,author_token) VALUES(?,?,?,?,?)",
+            (post_id, text, file_name, now_iso(), author)
         )
         cid = cur.lastrowid
         row = con.execute(
             "SELECT * FROM comments WHERE id=?", (cid,)).fetchone()
 
-    return jsonify(dict(row)), 201
+    return jsonify(public_comment(row)), 201
 
 
 @app.get("/uploads/<path:filename>")
@@ -201,7 +254,14 @@ def uploads(filename: str):
 
 @app.route("/api/posts/<int:post_id>", methods=["DELETE"])
 def delete_post(post_id):
+    token = client_token()
     with db() as con:
+        row = con.execute(
+            "SELECT author_token FROM posts WHERE id=?", (post_id,)).fetchone()
+        if not row:
+            return jsonify({"error": "Not found"}), 404
+        if not token or row["author_token"] != token:
+            return jsonify({"error": "Forbidden"}), 403
         con.execute("DELETE FROM comments WHERE post_id=?", (post_id,))
         con.execute("DELETE FROM posts WHERE id=?", (post_id,))
     return jsonify({"ok": True})
@@ -209,7 +269,14 @@ def delete_post(post_id):
 
 @app.route("/api/comments/<int:comment_id>", methods=["DELETE"])
 def delete_comment(comment_id):
+    token = client_token()
     with db() as con:
+        row = con.execute(
+            "SELECT author_token FROM comments WHERE id=?", (comment_id,)).fetchone()
+        if not row:
+            return jsonify({"error": "Not found"}), 404
+        if not token or row["author_token"] != token:
+            return jsonify({"error": "Forbidden"}), 403
         con.execute("DELETE FROM comments WHERE id=?", (comment_id,))
     return jsonify({"ok": True})
 
