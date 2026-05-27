@@ -125,6 +125,15 @@ header{
   text-align:center;
   padding:0 16px;
 }
+.heroKicker{
+  color:#fff;
+  border:1px solid rgba(255,255,255,.5);
+  background:rgba(0,0,0,.18);
+  padding:7px 14px;
+  border-radius:999px;
+  margin-bottom:14px;
+  font-size:15px;
+}
 .heroOverlay h1{
   text-shadow:0 2px 10px rgba(0,0,0,.4);
   margin:0 0 14px;
@@ -138,6 +147,18 @@ header{
   margin:0 0 18px;
   font-size:28px;
   color:#fff;
+  max-width:920px;
+  line-height:1.25;
+}
+.heroOverlay p span{
+  color:#f2c7c2;
+  font-weight:700;
+}
+.heroActions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
 }
 .btn{
   display:inline-block;
@@ -148,6 +169,10 @@ header{
   border-radius:8px;
   font-size:18px;
   cursor:pointer;
+}
+.ghostBtn{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.55);
 }
 
 /* Нижняя “полоса” на главной */
@@ -189,6 +214,15 @@ header{
   border-radius:18px;
   margin-top: 30px;
   justify-self: end;
+}
+.highlightLine{
+  margin:22px 0;
+  padding:14px 16px;
+  border-left:4px solid #111;
+  background:rgba(255,255,255,.22);
+  color:#111;
+  font-size:24px;
+  font-weight:700;
 }
 
 
@@ -359,6 +393,34 @@ header{
 .financePlans h3{
   font-size:20px;
   color:#222;
+}
+.startupSection{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  align-items:start;
+  background:var(--soft);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:22px;
+}
+.startupSection h2{
+  margin:0 0 8px;
+  color:var(--accent2);
+  font-size:30px;
+}
+.startupSection p{
+  margin:0;
+  color:#555;
+  font-size:17px;
+  line-height:1.5;
+}
+.startupSection ul{
+  margin:0;
+  padding-left:20px;
+  color:#444;
+  line-height:1.6;
 }
 
 /* Los geht’s верх (иконка круг + заголовок) */
@@ -693,6 +755,41 @@ footer{
 .priceCard h4{ margin:0 0 8px; }
 .priceCard ul{ margin:0; padding-left:18px; line-height:1.55; }
 .muted{ color:#666; font-size:0.95rem; margin-top:8px; }
+.featuredPrice{
+  background:rgba(255,255,255,.28) !important;
+  border-color:rgba(0,0,0,.34) !important;
+}
+
+.stepsGrid{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:12px;
+  margin:14px 0 28px;
+}
+.stepItem{
+  background:rgba(255,255,255,.28);
+  border:1px solid rgba(0,0,0,.16);
+  border-radius:14px;
+  padding:14px;
+  text-align:left;
+}
+.stepItem strong{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#fff;
+  color:#6b4a46;
+  margin-bottom:10px;
+}
+.stepItem span{
+  display:block;
+  color:#111;
+  line-height:1.35;
+  font-weight:600;
+}
 
 .shots,
 .previewGrid{
@@ -770,6 +867,7 @@ h2, h3, h4{
   .leistungenInner p{ font-size:20px; }
   .serviceGrid{ grid-template-columns:1fr 1fr; }
   .financeSection{ grid-template-columns:1fr; }
+  .startupSection{ grid-template-columns:1fr; }
   .twocol{ grid-template-columns:1fr; }
   .row{ grid-template-columns:1fr; }
   .heroOverlay h1{ font-size:44px; }
@@ -778,6 +876,7 @@ h2, h3, h4{
 
   .shots,
   .previewGrid{ grid-template-columns: 1fr; }
+  .stepsGrid{ grid-template-columns:1fr 1fr; }
   .pricing{ grid-template-columns: 1fr; }
   .financePlans{ grid-template-columns:1fr; }
 }
@@ -790,6 +889,8 @@ h2, h3, h4{
   .postVotes{ align-self:flex-start; }
 
   .hero img{ height:70vh; }
+  .heroKicker{ font-size:13px; }
+  .heroActions .btn{ width:100%; max-width:280px; }
   .leistungenBand{ margin-top:0; padding:28px 0; }
   .leistungenInner{ gap:18px; }
   .leistungenInner h1{ font-size:36px; }
@@ -806,6 +907,7 @@ h2, h3, h4{
 
   .pricing{ gap:12px; }
   .priceCard{ width:100%; }
+  .stepsGrid{ grid-template-columns:1fr; }
 }
 
 /* Нижние блоки под картинкой: центр по странице */
