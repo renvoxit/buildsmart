@@ -603,6 +603,22 @@ footer{
 }
 .postAddress{ font-weight:700; color:#333; }
 .postType{ color:#777; font-size:14px; margin-top:2px; }
+.statusPill,
+.demoPill{
+  display:inline-block;
+  margin-left:6px;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid #e2d2cf;
+  color:#6b4a46;
+  font-size:12px;
+  background:#fbf7f6;
+}
+.demoPill{
+  color:#777;
+  border-color:#ddd;
+  background:#fafafa;
+}
 .postVotes{ display:flex; align-items:center; gap:8px; }
 .voteCount{ color:#666; font-weight:700; }
 
@@ -678,7 +694,8 @@ footer{
 .priceCard ul{ margin:0; padding-left:18px; line-height:1.55; }
 .muted{ color:#666; font-size:0.95rem; margin-top:8px; }
 
-.shots{
+.shots,
+.previewGrid{
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:12px;
@@ -689,6 +706,45 @@ footer{
   border-radius:14px;
   border:1px solid rgba(0,0,0,.12);
   height:auto;
+}
+.previewPanel{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.16);
+  border-radius:14px;
+  overflow:hidden;
+  text-align:left;
+}
+.previewHead{
+  background:rgba(255,255,255,.55);
+  border-bottom:1px solid rgba(0,0,0,.12);
+  color:#111;
+  font-weight:700;
+  padding:12px 14px;
+}
+.previewPost{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.previewPost:last-child{ border-bottom:none; }
+.previewPost b,
+.previewPost span{
+  display:block;
+}
+.previewPost span{
+  color:#555;
+  margin-top:4px;
+  line-height:1.35;
+}
+.previewPost strong{
+  align-self:flex-start;
+  border:1px solid #e2d2cf;
+  border-radius:999px;
+  padding:4px 9px;
+  color:#6b4a46;
+  background:#fbf7f6;
 }
 
 /* Typography tweaks (kept) */
@@ -720,7 +776,8 @@ h2, h3, h4{
   .heroOverlay p{ font-size:20px; }
   .logoTitle{ font-size:42px; }
 
-  .shots{ grid-template-columns: 1fr; }
+  .shots,
+  .previewGrid{ grid-template-columns: 1fr; }
   .pricing{ grid-template-columns: 1fr; }
   .financePlans{ grid-template-columns:1fr; }
 }

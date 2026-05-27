@@ -1,5 +1,64 @@
 const API = location.origin;
 const CLIENT_TOKEN_KEY = "buildsmart_client_token";
+const DEMO_POSTS = {
+  vorschlag: [
+    {
+      id: "demo-v1",
+      demo: true,
+      category: "vorschlag",
+      address: "Marktplatz 4",
+      description: "Neue Fahrradständer neben dem Eingang würden den Platz ordentlicher machen und den Gehweg freihalten.",
+      image_url: "./assets/building.jpg",
+      votes: 18,
+      status: "In Prüfung",
+      comments: [
+        { text: "Gute Idee, dort stehen oft Fahrräder direkt am Schaufenster.", created_at: "Demo" },
+        { text: "Vielleicht mit zwei zusätzlichen Bäumen kombinieren.", created_at: "Demo" }
+      ]
+    },
+    {
+      id: "demo-v2",
+      demo: true,
+      category: "vorschlag",
+      address: "Schulstraße 12",
+      description: "Mehr Sitzplätze und ein kleiner Schattenbereich würden den Weg zur Schule angenehmer machen.",
+      image_url: "./assets/box-sketch.jpg",
+      votes: 11,
+      status: "Neu",
+      comments: [
+        { text: "Das wäre besonders im Sommer hilfreich.", created_at: "Demo" }
+      ]
+    }
+  ],
+  anmerkung: [
+    {
+      id: "demo-a1",
+      demo: true,
+      category: "anmerkung",
+      address: "Parkweg 8",
+      description: "Die Beleuchtung am Weg ist abends sehr schwach. Bitte prüfen, ob die Laterne repariert werden kann.",
+      image_url: "./assets/hero-city.png",
+      votes: 24,
+      status: "Geplant",
+      comments: [
+        { text: "Ich laufe dort jeden Abend vorbei, das Problem besteht seit Wochen.", created_at: "Demo" }
+      ]
+    },
+    {
+      id: "demo-a2",
+      demo: true,
+      category: "anmerkung",
+      address: "Bahnhofstraße 21",
+      description: "Der Gehweg ist an einer Stelle beschädigt und für Kinderwagen schwer zu passieren.",
+      image_url: "./assets/building.jpg",
+      votes: 15,
+      status: "Neu",
+      comments: [
+        { text: "Bitte auch für Rollstühle prüfen.", created_at: "Demo" }
+      ]
+    }
+  ]
+};
 
 function getClientToken(){
   let token = localStorage.getItem(CLIENT_TOKEN_KEY);
@@ -112,39 +171,28 @@ if (shareOpenA){
 function postItemHTML(p){
   const img = p.image_path
   ? `${API}/uploads/${encodeURIComponent(p.image_path)}`
-  : "./assets/placeholder-thumb.jpg";
+  : p.image_url;
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
+  const status = p.status ? `<span class="statusPill">${escapeHtml(p.status)}</span>` : "";
+  const demoLabel = p.demo ? `<span class="demoPill">Beispiel</span>` : "";
   const deleteButton = p.can_delete
     ? `<button class="voteBtn dangerBtn" data-delete-post="${p.id}" title="Löschen">Delete</button>`
     : "";
-  return `
-    <div class="postCard">
-      <div class="postTop">
-        <div class="postMeta">
-          <div class="postAddress">${escapeHtml(p.address)}</div>
-          <div class="postType">${escapeHtml(label)}</div>
-        </div>
-        <div class="postVotes">
-          <button class="voteBtn" data-vote="${p.id}" title="Vote">👍</button>
-          <span class="voteCount">${p.votes}</span>
-        </div>
+  const voteButton = p.demo
+    ? `<button class="voteBtn" type="button" title="Demo-Beitrag">Like</button>`
+    : `<button class="voteBtn" data-vote="${p.id}" title="Vote">Like</button>`;
+  const media = img
+    ? `<div class="postMedia"><img class="postImg" src="${img}" alt="Beitragsbild"/></div>`
+    : "";
+  const comments = p.demo
+    ? (p.comments || []).map(c => `
+      <div class="commentItem">
+        <div class="commentText">${formatText(c.text)}</div>
+        <div class="commentMeta"><span>${escapeHtml(c.created_at)}</span></div>
       </div>
-
-      <div class="postBody">
-        <div class="postText">${formatText(p.description)}</div>
-        <div class="postMedia">
-          <img class="postImg" src="${img}" alt="image"/>
-        </div>
-      </div>
-
-      <div class="postActions">
-  <button class="commentToggle" data-toggle-comments="${p.id}">Kommentare</button>
-  ${deleteButton}
-</div>
-
-      <div class="commentsBox" id="comments-${p.id}" style="display:none;">
-        <div class="commentsList" id="commentsList-${p.id}"></div>
-
+    `).join("")
+    : "";
+  const commentForm = p.demo ? "" : `
         <form class="commentForm" data-comment-form="${p.id}">
           <textarea class="input" name="text" required
             placeholder="Kommentar schreiben (ohne E-Mail)…"></textarea>
@@ -156,6 +204,33 @@ function postItemHTML(p){
 
           <div class="status" id="cstatus-${p.id}"></div>
         </form>
+  `;
+  return `
+    <div class="postCard">
+      <div class="postTop">
+        <div class="postMeta">
+          <div class="postAddress">${escapeHtml(p.address)}</div>
+          <div class="postType">${escapeHtml(label)} ${status} ${demoLabel}</div>
+        </div>
+        <div class="postVotes">
+          ${voteButton}
+          <span class="voteCount">${p.votes}</span>
+        </div>
+      </div>
+
+      <div class="postBody">
+        <div class="postText">${formatText(p.description)}</div>
+        ${media}
+      </div>
+
+      <div class="postActions">
+  <button class="commentToggle" data-toggle-comments="${p.id}">Kommentare</button>
+  ${deleteButton}
+</div>
+
+      <div class="commentsBox" id="comments-${p.id}" style="display:none;">
+        <div class="commentsList" id="commentsList-${p.id}">${comments}</div>
+        ${commentForm}
       </div>
     </div>
   `;
@@ -169,8 +244,8 @@ async function loadLists(){
   const v = await fetchJSON(`${API}/api/posts?category=vorschlag`);
   const a = await fetchJSON(`${API}/api/posts?category=anmerkung`);
 
-  lv.innerHTML = v.length ? v.map(postItemHTML).join("") : `<div class="emptyState">Noch keine Vorschläge.</div>`;
-  la.innerHTML = a.length ? a.map(postItemHTML).join("") : `<div class="emptyState">Noch keine Anmerkungen.</div>`;
+  lv.innerHTML = v.length ? v.map(postItemHTML).join("") : DEMO_POSTS.vorschlag.map(postItemHTML).join("");
+  la.innerHTML = a.length ? a.map(postItemHTML).join("") : DEMO_POSTS.anmerkung.map(postItemHTML).join("");
 }
 
 async function submitPost(formId, statusId, modalId){
@@ -220,7 +295,7 @@ document.addEventListener("click", async (e) => {
 
     const open = box.style.display === "block";
     box.style.display = open ? "none" : "block";
-    if (!open) await loadComments(id);
+    if (!open && !id.startsWith("demo-")) await loadComments(id);
   }
 });
 
