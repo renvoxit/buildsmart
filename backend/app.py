@@ -50,6 +50,7 @@ def init_db():
             con.executescript(f.read())
         ensure_column(con, "posts", "author_token", "TEXT")
         ensure_column(con, "comments", "author_token", "TEXT")
+        ensure_column(con, "comments", "votes", "INTEGER NOT NULL DEFAULT 0")
         con.execute("""
             CREATE TABLE IF NOT EXISTS post_votes (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,6 +59,16 @@ def init_db():
               created_at TEXT NOT NULL,
               FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
               UNIQUE(post_id, voter_token)
+            )
+        """)
+        con.execute("""
+            CREATE TABLE IF NOT EXISTS comment_votes (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              comment_id INTEGER NOT NULL,
+              voter_token TEXT NOT NULL,
+              created_at TEXT NOT NULL,
+              FOREIGN KEY(comment_id) REFERENCES comments(id) ON DELETE CASCADE,
+              UNIQUE(comment_id, voter_token)
             )
         """)
 
@@ -245,6 +256,45 @@ def add_comment(post_id: int):
             "SELECT * FROM comments WHERE id=?", (cid,)).fetchone()
 
     return jsonify(public_comment(row)), 201
+
+
+@app.post("/api/comments/<int:comment_id>/vote")
+def vote_comment(comment_id: int):
+    now = time()
+    voter = client_token() or request.remote_addr or "anonymous"
+
+    with db() as con:
+        row = con.execute("SELECT id FROM comments WHERE id=?",
+                          (comment_id,)).fetchone()
+        if not row:
+            return jsonify({"error": "Not found"}), 404
+
+        existing_vote = con.execute(
+            "SELECT id FROM comment_votes WHERE comment_id=? AND voter_token=?",
+            (comment_id, voter)
+        ).fetchone()
+        if existing_vote:
+            return jsonify({"error": "Already voted"}), 409
+
+        last = VOTE_COOLDOWN.get(f"comment:{voter}", 0)
+        if now - last < 3:
+            return jsonify({"error": "Too fast"}), 429
+
+        VOTE_COOLDOWN[f"comment:{voter}"] = now
+
+        try:
+            con.execute(
+                "INSERT INTO comment_votes(comment_id,voter_token,created_at) VALUES(?,?,?)",
+                (comment_id, voter, now_iso())
+            )
+        except sqlite3.IntegrityError:
+            return jsonify({"error": "Already voted"}), 409
+
+        con.execute("UPDATE comments SET votes = votes + 1 WHERE id=?", (comment_id,))
+        row2 = con.execute(
+            "SELECT votes FROM comments WHERE id=?", (comment_id,)).fetchone()
+
+    return jsonify({"comment_id": comment_id, "votes": row2["votes"]})
 
 
 @app.get("/uploads/<path:filename>")

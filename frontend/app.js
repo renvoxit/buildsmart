@@ -12,8 +12,8 @@ const DEMO_POSTS = {
       votes: 18,
       status: "In Prüfung",
       comments: [
-        { text: "Gute Idee, dort stehen oft Fahrräder direkt am Schaufenster.", created_at: "Demo" },
-        { text: "Vielleicht mit zwei zusätzlichen Bäumen kombinieren.", created_at: "Demo" }
+        { text: "Gute Idee, dort stehen oft Fahrräder direkt am Schaufenster.", created_at: "Demo", votes: 5 },
+        { text: "Vielleicht mit zwei zusätzlichen Bäumen kombinieren.", created_at: "Demo", votes: 3 }
       ]
     },
     {
@@ -26,7 +26,7 @@ const DEMO_POSTS = {
       votes: 11,
       status: "Neu",
       comments: [
-        { text: "Das wäre besonders im Sommer hilfreich.", created_at: "Demo" }
+        { text: "Das wäre besonders im Sommer hilfreich.", created_at: "Demo", votes: 2 }
       ]
     }
   ],
@@ -41,7 +41,7 @@ const DEMO_POSTS = {
       votes: 24,
       status: "Geplant",
       comments: [
-        { text: "Ich laufe dort jeden Abend vorbei, das Problem besteht seit Wochen.", created_at: "Demo" }
+        { text: "Ich laufe dort jeden Abend vorbei, das Problem besteht seit Wochen.", created_at: "Demo", votes: 7 }
       ]
     },
     {
@@ -54,7 +54,7 @@ const DEMO_POSTS = {
       votes: 15,
       status: "Neu",
       comments: [
-        { text: "Bitte auch für Rollstühle prüfen.", created_at: "Demo" }
+        { text: "Bitte auch für Rollstühle prüfen.", created_at: "Demo", votes: 4 }
       ]
     }
   ]
@@ -188,7 +188,10 @@ function postItemHTML(p){
     ? (p.comments || []).map(c => `
       <div class="commentItem">
         <div class="commentText">${formatText(c.text)}</div>
-        <div class="commentMeta"><span>${escapeHtml(c.created_at)}</span></div>
+        <div class="commentMeta">
+          <span>${escapeHtml(c.created_at)}</span>
+          <span class="commentVoteStatic">Like ${c.votes || 0}</span>
+        </div>
       </div>
     `).join("")
     : "";
@@ -297,6 +300,21 @@ document.addEventListener("click", async (e) => {
     box.style.display = open ? "none" : "block";
     if (!open && !id.startsWith("demo-")) await loadComments(id);
   }
+
+  const cvbtn = e.target.closest("[data-vote-comment]");
+  if (cvbtn){
+    const id = cvbtn.getAttribute("data-vote-comment");
+    try{
+      const data = await fetchJSON(`${API}/api/comments/${id}/vote`, { method:"POST" });
+      const count = cvbtn.closest(".commentVote")?.querySelector(".commentVoteCount");
+      if (count) count.textContent = data.votes;
+    }catch(err){
+      alert(err.message === "Already voted"
+        ? "Du hast diesen Kommentar bereits bewertet."
+        : "Bitte warte kurz, bevor du erneut bewertest.");
+      console.error(err);
+    }
+  }
 });
 
 document.addEventListener("submit", async (e) => {
@@ -337,6 +355,12 @@ async function loadComments(postId){
     const deleteButton = c.can_delete
       ? `<button class="voteBtn dangerBtn" data-delete-comment="${c.id}">Delete</button>`
       : "";
+    const voteButton = `
+      <span class="commentVote">
+        <button class="voteBtn" data-vote-comment="${c.id}" title="Kommentar bewerten">Like</button>
+        <span class="commentVoteCount">${c.votes || 0}</span>
+      </span>
+    `;
 
     return `
       <div class="commentItem">
@@ -344,6 +368,7 @@ async function loadComments(postId){
         <div class="commentMeta">
           <span>${escapeHtml(c.created_at)}</span>
           ${file}
+          ${voteButton}
           ${deleteButton}
         </div>
       </div>

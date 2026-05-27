@@ -721,9 +721,21 @@ footer{
   margin-top:8px;
   display:flex;
   justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
   gap:10px;
   color:#777;
   font-size:12px;
+}
+.commentVote{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.commentVoteStatic,
+.commentVoteCount{
+  color:#6b4a46;
+  font-weight:700;
 }
 .fileLink{ color:#6b4a46; text-decoration:underline; }
 .inlineLink{ color:#6b4a46; text-decoration:underline; overflow-wrap:anywhere; }
