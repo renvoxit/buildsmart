@@ -283,6 +283,36 @@ header{
   line-height:1.55;
   color:#555;
 }
+.aboutValues{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:16px;
+  margin:42px 0 10px;
+}
+.aboutValues article,
+.homeInfoItem{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:18px;
+}
+.aboutValues h2,
+.homeInfoItem h4{
+  margin:0 0 8px;
+  color:var(--accent2);
+}
+.aboutValues h2{
+  font-size:24px;
+}
+.aboutValues p,
+.homeInfoItem p{
+  margin:0;
+  color:#555;
+  line-height:1.5;
+}
+.aboutMission{
+  margin-top:54px;
+}
 .circleIcon{
   width:320px;
   height:320px;
@@ -772,6 +802,21 @@ footer{
   border-color:rgba(0,0,0,.34) !important;
 }
 
+.homeInfoGrid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:16px;
+  margin-top:14px;
+  text-align:left;
+}
+.homeInfoItem{
+  background:rgba(255,255,255,.34);
+  border-color:rgba(0,0,0,.16);
+}
+.homeInfoItem h4{
+  color:#111;
+}
+
 .stepsGrid{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
@@ -874,6 +919,8 @@ h2, h3, h4{
 @media (max-width: 900px){
   .bandInner{ grid-template-columns:1fr; padding:60px 16px; }
   .twoCols{ grid-template-columns:1fr; }
+  .aboutValues,
+  .homeInfoGrid{ grid-template-columns:1fr; }
   .leistungenInner{ grid-template-columns:1fr; }
   .leistungenInner h1{ font-size:44px; }
   .leistungenInner p{ font-size:20px; }

@@ -1,5 +1,7 @@
 const API = location.origin;
 const CLIENT_TOKEN_KEY = "buildsmart_client_token";
+const DEMO_VOTES_KEY = "buildsmart_demo_votes";
+const DEMO_LIKED_KEY = "buildsmart_demo_liked";
 const DEMO_POSTS = {
   vorschlag: [
     {
@@ -8,7 +10,7 @@ const DEMO_POSTS = {
       category: "vorschlag",
       address: "Marktplatz 4",
       description: "Neue Fahrradständer neben dem Eingang würden den Platz ordentlicher machen und den Gehweg freihalten.",
-      image_url: "./assets/building.jpg",
+      image_url: "./assets/fahrradstande.jpg",
       votes: 18,
       status: "In Prüfung",
       comments: [
@@ -22,7 +24,7 @@ const DEMO_POSTS = {
       category: "vorschlag",
       address: "Schulstraße 12",
       description: "Mehr Sitzplätze und ein kleiner Schattenbereich würden den Weg zur Schule angenehmer machen.",
-      image_url: "./assets/box-sketch.jpg",
+      image_url: "./assets/sitzplatze.jpg",
       votes: 11,
       status: "Neu",
       comments: [
@@ -37,7 +39,7 @@ const DEMO_POSTS = {
       category: "anmerkung",
       address: "Parkweg 8",
       description: "Die Beleuchtung am Weg ist abends sehr schwach. Bitte prüfen, ob die Laterne repariert werden kann.",
-      image_url: "./assets/hero-city.png",
+      image_url: "./assets/beleuchtung.jpg",
       votes: 24,
       status: "Geplant",
       comments: [
@@ -50,7 +52,7 @@ const DEMO_POSTS = {
       category: "anmerkung",
       address: "Bahnhofstraße 21",
       description: "Der Gehweg ist an einer Stelle beschädigt und für Kinderwagen schwer zu passieren.",
-      image_url: "./assets/building.jpg",
+      image_url: "./assets/beschadigte-gehweg.jpeg",
       votes: 15,
       status: "Neu",
       comments: [
@@ -59,6 +61,34 @@ const DEMO_POSTS = {
     }
   ]
 };
+
+function readJSON(key, fallback){
+  try {
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function getDemoVotes(){
+  return readJSON(DEMO_VOTES_KEY, {});
+}
+
+function getDemoLiked(){
+  return readJSON(DEMO_LIKED_KEY, {});
+}
+
+function likeDemoPost(id){
+  const liked = getDemoLiked();
+  if (liked[id]) return false;
+
+  const votes = getDemoVotes();
+  votes[id] = (votes[id] || 0) + 1;
+  liked[id] = true;
+  localStorage.setItem(DEMO_VOTES_KEY, JSON.stringify(votes));
+  localStorage.setItem(DEMO_LIKED_KEY, JSON.stringify(liked));
+  return true;
+}
 
 function getClientToken(){
   let token = localStorage.getItem(CLIENT_TOKEN_KEY);
@@ -173,13 +203,15 @@ function postItemHTML(p){
   ? `${API}/uploads/${encodeURIComponent(p.image_path)}`
   : p.image_url;
   const label = p.category === "vorschlag" ? "Idee" : "Anmerkung";
+  const demoVotes = p.demo ? (getDemoVotes()[p.id] || 0) : 0;
+  const totalVotes = (p.votes || 0) + demoVotes;
   const status = p.status ? `<span class="statusPill">${escapeHtml(p.status)}</span>` : "";
   const demoLabel = p.demo ? `<span class="demoPill">Beispiel</span>` : "";
   const deleteButton = p.can_delete
     ? `<button class="voteBtn dangerBtn" data-delete-post="${p.id}" title="Löschen">Delete</button>`
     : "";
   const voteButton = p.demo
-    ? `<button class="voteBtn" type="button" title="Demo-Beitrag">Like</button>`
+    ? `<button class="voteBtn" data-demo-vote="${p.id}" title="Demo-Beitrag bewerten">Like</button>`
     : `<button class="voteBtn" data-vote="${p.id}" title="Vote">Like</button>`;
   const media = img
     ? `<div class="postMedia"><img class="postImg" src="${img}" alt="Beitragsbild"/></div>`
@@ -217,7 +249,7 @@ function postItemHTML(p){
         </div>
         <div class="postVotes">
           ${voteButton}
-          <span class="voteCount">${p.votes}</span>
+          <span class="voteCount">${totalVotes}</span>
         </div>
       </div>
 
@@ -276,6 +308,17 @@ submitPost("formV", "statusV", "modalV");
 submitPost("formA", "statusA", "modalA");
 
 document.addEventListener("click", async (e) => {
+  const demoVoteBtn = e.target.closest("[data-demo-vote]");
+  if (demoVoteBtn){
+    const id = demoVoteBtn.getAttribute("data-demo-vote");
+    if (!likeDemoPost(id)){
+      alert("Du hast diesen Beispiel-Beitrag bereits bewertet.");
+      return;
+    }
+    await loadLists();
+    return;
+  }
+
   const vbtn = e.target.closest("[data-vote]");
   if (vbtn){
     const id = vbtn.getAttribute("data-vote");
