@@ -279,8 +279,8 @@ async function loadLists(){
   const v = await fetchJSON(`${API}/api/posts?category=vorschlag`);
   const a = await fetchJSON(`${API}/api/posts?category=anmerkung`);
 
-  lv.innerHTML = v.length ? v.map(postItemHTML).join("") : DEMO_POSTS.vorschlag.map(postItemHTML).join("");
-  la.innerHTML = a.length ? a.map(postItemHTML).join("") : DEMO_POSTS.anmerkung.map(postItemHTML).join("");
+  lv.innerHTML = [...DEMO_POSTS.vorschlag, ...v].map(postItemHTML).join("");
+  la.innerHTML = [...DEMO_POSTS.anmerkung, ...a].map(postItemHTML).join("");
 }
 
 async function submitPost(formId, statusId, modalId){
